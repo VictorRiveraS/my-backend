@@ -1,0 +1,39 @@
+{
+    "name": "jv-backend-app",
+    "version": "1.0.0",
+    "description": "Backend for Jv App",
+    "main": "index",
+    "scripts": {
+        "dev": "nodemon",
+        "lint": "eslint .",
+        "start": "node index",
+        "test": "standard && node index",
+        "standart": "standard"
+    },
+    "author": "Victor Rivera",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/bcryptjs": "2.4.2",
+        "@types/express": "4.17.13",
+        "@types/typescript": "2.0.0",
+        "nodemon": "2.0.19",
+        "standard": "17.0.0"
+    },
+    "dependencies": {
+        "bcryptjs": "2.4.3",
+        "config": "3.3.7",
+        "cors": "2.8.5",
+        "dotenv": "16.0.1",
+        "express": "4.18.1",
+        "express-validator": "6.14.2",
+        "jsonwebtoken": "8.5.1",
+        "mongoose": "6.4.3",
+        "morgan": "1.10.0",
+        "ts-node": "10.8.2",
+        "typescript": "4.7.4",
+        "winston": "3.8.1"
+    },
+    "eslintConfig": {
+        "extends": "./node_modules/standard/eslintrc.json"
+    }
+}
