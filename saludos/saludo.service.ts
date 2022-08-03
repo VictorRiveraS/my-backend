@@ -90,7 +90,6 @@ class saludoService {
                 message: 'Saludo created.'
             }];
         } catch (error) {
-            console.log(error);
             return [500, error];
         }
     }

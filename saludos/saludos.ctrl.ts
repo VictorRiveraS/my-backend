@@ -75,13 +75,9 @@ class saludoCtrl {
 
     public async addSaludo(req: Request, res: Response): Promise<any> {
         try {
-            console.log(req.body);
-
             const newSaludo = await service.postSaludo(req.body);
             Handler(res, newSaludo[0], newSaludo[1]);
         } catch (error) {
-            console.log(error);
-
             Handler(res, 500, error);
         }
     }
