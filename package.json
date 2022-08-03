@@ -8,7 +8,9 @@
         "lint": "eslint .",
         "start": "node index",
         "test": "standard && node index",
-        "standart": "standard"
+        "standart": "standard",
+        "serve": "node build/server.js",
+        "build": "tsc --lib dom"
     },
     "author": "Victor Rivera",
     "license": "ISC",
