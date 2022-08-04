@@ -11,8 +11,6 @@ class RouteValidator {
             }
             next();
         } catch (error) {
-            console.log(error);
-
             Handler(res, 500, error);
         }
     }

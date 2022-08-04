@@ -2,21 +2,18 @@
 version: "3.8"
 services:
   api:
-    build:
-      context: $PWD
-      dockerfile: $PWD/Dockerfile
-    image: jv/api:vB1.0.0
     container_name: api
-    user: "node"
-    hostname: node
+    restart: "always"
+    build: .
     ports:
       - "3000:3000"
-    restart: "always"
+    image: jv/api:vB1.0.0
+    user: "node"
+    hostname: node
     links:
       - mongodb
     volumes:
-    - $HOME/logs:/logs
-    - $PWD/permission.json:/api/permission.json
+    - .:/usr/src/api
     networks:
       - jv_backend_default
   mongodb:
