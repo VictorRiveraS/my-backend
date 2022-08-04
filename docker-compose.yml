@@ -13,7 +13,7 @@ services:
     links:
       - mongodb
     volumes:
-      - .:/usr/src/api
+      - .:/api
     networks:
       - jv_backend_default
   mongodb:
