@@ -6,10 +6,10 @@
     "scripts": {
         "dev": "nodemon",
         "lint": "eslint .",
-        "start": "node index",
-        "test": "standard && node index",
+        "start": "node src/index",
+        "test": "standard && node scr/index",
         "standart": "standard",
-        "serve": "node build/server.js",
+        "serve": "node build/index.js",
         "build": "tsc --lib dom"
     },
     "author": "Victor Rivera",

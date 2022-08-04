@@ -1,0 +1,4 @@
+{
+    "port": 3002,
+    "mongodb": "mongodb+srv://Soma0112:Soma0112@cluster0.rcolyym.mongodb.net/test"
+}
