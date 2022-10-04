@@ -6,3 +6,8 @@
 {"label":"jv-confort","level":"info","message":"Connected to MongoDB!!","timestamp":"2022-08-04T18:55:24.781Z"}
 {"label":"jv-confort","level":"info","message":"Connected to MongoDB!!","timestamp":"2022-08-04T18:55:57.012Z"}
 {"label":"jv-confort","level":"info","message":"Connected to MongoDB!!","timestamp":"2022-08-04T18:56:03.790Z"}
+{"label":"jv-confort","level":"info","message":"GET /api/saludo 201 426 - 119.521 ms\n","timestamp":"2022-08-04T19:28:55.569Z"}
+{"label":"jv-confort","level":"info","message":"GET /api/saludo 201 426 - 328.064 ms\n","timestamp":"2022-08-04T19:28:59.855Z"}
+{"label":"jv-confort","level":"info","message":"GET /api/saludo 201 426 - 93.733 ms\n","timestamp":"2022-09-28T20:53:20.188Z"}
+{"label":"jv-confort","level":"info","message":"GET /api/banners 404 150 - 4.402 ms\n","timestamp":"2022-09-28T21:15:06.322Z"}
+{"label":"jv-confort","level":"info","message":"GET /api/banners/login 404 156 - 3.049 ms\n","timestamp":"2022-09-28T21:15:26.869Z"}
