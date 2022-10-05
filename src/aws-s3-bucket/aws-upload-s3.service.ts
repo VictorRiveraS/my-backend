@@ -17,7 +17,7 @@ const limits20Mb = { fileSize: 20 * 1024 * 1024 };
 const limits5Mb = { fileSize: 5 * 1024 * 1024 };
 const limits2Mb = { fileSize: 2 * 1024 * 1024 };
 
-/* const storage = multerS3({
+const storage = multerS3({
     s3: s3,
     bucket: AWS_S3_BUCKET,
     acl: 'public-read',
@@ -26,33 +26,33 @@ const limits2Mb = { fileSize: 2 * 1024 * 1024 };
         const type: string = req.params.type_upload_s3;
         cb(null, { fieldName: type });
     },
-    key: function (req: RequestTenant, file, cb) {
+    key: function (req, file, cb) {
         const type: string = req.params.type_upload_s3;
         const paths3: string = req.params.route_upload_s3;
         var ext = path.extname(file.originalname);
         var fullPath = paths3 + type + ext;
         cb(null, fullPath)
-    } 
-});*/
+    }
+});
 
-/* const storageMulti = multerS3({
-  s3: s3,
-  bucket: AWS_S3_BUCKET,
-  acl: 'public-read',
-  contentType: multerS3.AUTO_CONTENT_TYPE,
-  metadata: function (req: Request, file, cb) {
-    const type: string = file.fieldname;
-    cb(null, { fieldName: type });
-  },
-  key: function (req: RequestTenant, file, cb) {
-    const fieldname = file.fieldname;
-    const type: string = req.params.type_upload_s3;
-    const paths3: string = req.params.route_upload_s3;
-    var ext = path.extname(file.originalname);
-    var fullPath = paths3  + type + "_" + fieldname + ext;
-    cb(null, fullPath)
-  }
-}); */
+const storageMulti = multerS3({
+    s3: s3,
+    bucket: AWS_S3_BUCKET,
+    acl: 'public-read',
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    metadata: function (req: Request, file, cb) {
+        const type: string = file.fieldname;
+        cb(null, { fieldName: type });
+    },
+    key: function (req, file, cb) {
+        const fieldname = file.fieldname;
+        const type: string = req.params.type_upload_s3;
+        const paths3: string = req.params.route_upload_s3;
+        var ext = path.extname(file.originalname);
+        var fullPath = paths3 + type + "_" + fieldname + ext;
+        cb(null, fullPath)
+    }
+});
 
 const fileFilterImage = function (req, file, cb) {
     var ext = path.extname(file.originalname);
@@ -94,9 +94,9 @@ const fileFilterFont = function (req, file, cb) {
     cb(null, true)
 };
 
-/* export const uploadImageS3 = multer({ storage: storage, limits: limits5Mb, fileFilter: fileFilterImage });
+export const uploadImageS3 = multer({ storage: storage, limits: limits5Mb, fileFilter: fileFilterImage });
 export const uploadMultiFontS3 = multer({ storage: storageMulti, limits: limits2Mb, fileFilter: fileFilterFont });
 export const uploadFileS3 = multer({ storage: storage, limits: limits20Mb, fileFilter: fileFilterMultimedia });
 export const uploadMultiImageS3 = multer({ storage: storageMulti, limits: limits5Mb, fileFilter: fileFilterImage });
-export const uploadMultiFileS3 =  multer({ storage: storageMulti, limits: limits5Mb, fileFilter: fileFilterImageAndPDF });
-export const uploadMultiFileVideoS3 =  multer({ storage: storageMulti, limits: limits20Mb, fileFilter: fileFilterVideoImageAndPDF }); */
+export const uploadMultiFileS3 = multer({ storage: storageMulti, limits: limits5Mb, fileFilter: fileFilterImageAndPDF });
+export const uploadMultiFileVideoS3 = multer({ storage: storageMulti, limits: limits20Mb, fileFilter: fileFilterVideoImageAndPDF });

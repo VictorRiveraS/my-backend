@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import ctrl from './banners.ctrl';
-import { loginValidator, forgotPasswordValidator, resetPasswordValidator } from './banners.validator';
 import RouteValidator from '../helpers/validators';
+import { bannerssValidator } from './banners.validator';
 
 export const BannersRoutes = Router();
 
 BannersRoutes
-    .get('/', loginValidator, RouteValidator.validate, ctrl.signin)
-    .get('/id', forgotPasswordValidator, RouteValidator.validate, ctrl.forgotPassword)
-    .post('/', resetPasswordValidator, RouteValidator.validate, ctrl.resetPassword)
-    .patch('/', resetPasswordValidator, RouteValidator.validate, ctrl.resetPassword)
-    .delete('/', resetPasswordValidator, RouteValidator.validate, ctrl.resetPassword);
+    .get('/', RouteValidator.validate, ctrl.fetchBanners)
+    .get('/id', bannerssValidator, RouteValidator.validate, ctrl.getBannerById)
+    .post('/', RouteValidator.validate, ctrl.createBanner)
+    .patch('/', bannerssValidator, RouteValidator.validate, ctrl.updateBanner)
+    .delete('/', bannerssValidator, RouteValidator.validate, ctrl.deleteBanner);

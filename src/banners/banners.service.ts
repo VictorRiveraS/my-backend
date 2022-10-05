@@ -1,99 +1,95 @@
-import JWT from '../helpers/jwt';
-import User, { IAdminUser } from '../users/users.model';
-import { compare, hash } from 'bcryptjs';
-import { IDecodedAdminUserData, IAdminLoginRequest } from './banners.model';
+import { BannersModel } from './banners.model';
 
 class BannersService {
-    public async signin(body: IAdminLoginRequest): Promise<any> {
+
+
+    public async createBanner(body: any): Promise<any> {
         try {
-            let { email, password } = body;
-            const existUser: IAdminUser = await this.existUser(email);
-            if (!existUser) {
-                return [400, { error: 'Invalid credentials' }];
-            }
-            const comparePass: boolean = existUser ? await compare(password, existUser.password) : false;
-            if (!comparePass) {
-                return [400, { error: 'Invalid credentials' }];
-            }
-            const sign = await this.signJWT(existUser);
-            const token = {
-                jwt: sign
-            }
-            return [201, { token }];
+            console.log(body.banner_id);
+            const create_banner: any = await BannersModel.create(body);
+            return [201, { message: 'banner added', create_banner }];
         } catch (error) {
-            return [500, { error }];
-        }
-    }
-
-    public async signJWT(userData: IAdminUser): Promise<string> {
-        let encodedData: IDecodedAdminUserData = {
-            id: userData._id,
-            email: userData.email,
-            name: userData.name,
-            rol: userData.rol,
-            birth_date: userData.birth_date,
-            created_at: userData.created_at,
-            updated_at: userData.updated_at,
-            last_name: userData.last_name,
-        };
-        const token = JWT.sign(encodedData, '1h');
-        return token;
-    }
-
-    public async existUser(email: string): Promise<any> {
-        try {
-            const user: IAdminUser | null = await User.findOne({ email });
-            if (user === null || !user.status) {
-                return false;
-            }
-            return user;
-        } catch (error) {
-            return false;
-        }
-    }
-
-    public async forgotPassword(email: string): Promise<any> {
-        try {
-            const existUser: any = await this.existUser(email);
-            if (!existUser) {
-                return [404, { error: 'The email does not exist or is not registered.' }];
-            }
-            const token = JWT.sign('reset', '5m');
-            /*    const send = new MailHelper(
-                   email,
-                   'Recupera tu contraseña',
-                   `Click here to set a new password: ${URL}/auth/reset?token=${token}&email=${email}`,
-                   EMAIL_USER,
-                   'reset-password',
-                   {
-                       "URL_FB": 'www.facebook.com',
-                       "URL_INSTAGRAM": 'www.facebook.com',
-                       "URL_TWITTER": 'www.facebook.com',
-                       "URL_WHATSAPP": 'www.facebook.com',
-                       "SITEURL": `${URL}/auth/reset?token=${token}&email=${email}`,
-                   }
-               );
-               const mail_status = await send.sendMailWithTemplate(); */
-            return [201, {
-                message: 'Reset password mail successfully sent.',
-/*                 mail_accepted: mail_status?.accepted?.length > 0 ? true : false
- */            }];
-        }
-        catch (error) {
             return [500, error];
         }
     }
 
-    public async resetPassword(new_password: string, email: string): Promise<any> {
+    public async bannerExist(banner_id: string): Promise<any> {
         try {
-            const user: IAdminUser = await this.existUser(email);
-            if (!user) {
-                return [404, { error: 'User not exist.' }];
+            const banners = await BannersModel.find({ banner_id: banner_id });
+            if (banners.length > 0) {
+                return true;
+            } else {
+                return false;
             }
-            const hashNewPassword = await hash(new_password, 10);
-            await User.findByIdAndUpdate(user._id, { password: hashNewPassword });
-            return [201, {
-                message: 'Password updated.'
+        } catch (error) {
+            return [500, error];
+        }
+    }
+
+    public async updateBanner(banner_id: string, body: any): Promise<any> {
+        try {
+            const bannerExist: boolean = await this.bannerExist(banner_id);
+            if (!bannerExist) {
+                return [404, { message: "Banner not found." }]
+            }
+            const edit_banner = await BannersModel.findOneAndUpdate({ banner_id: banner_id }, body).setOptions({ new: true });
+            if (!edit_banner) {
+                return [401, {
+                    message: 'News not update'
+                }];
+            }
+            return [200, {
+                edit_banner
+            }]
+        } catch (error) {
+            return [500, error];
+        }
+    }
+
+    public async deleteBanner(body: object, banner_id: string): Promise<any> {
+        try {
+            const bannerExist: boolean = await this.bannerExist(banner_id);
+            if (!bannerExist) {
+                return [404, { message: "Banner not found." }]
+            }
+            const delete_banner_remove = await BannersModel.findOneAndDelete({ banner_id: banner_id }, body)
+            if (!delete_banner_remove) {
+                return [400, {
+                    message: 'Banner not delete'
+                }];
+            }
+            return [200, {
+                message: 'Banner deleted', delete_banner_remove
+            }];
+        } catch (error) {
+            return [500, error];
+        }
+    }
+
+    public async getBannersCount(body: object): Promise<any> {
+        try {
+            let segmentCount: number = await BannersModel.find(body).count();
+            return segmentCount
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    public async getBannersService(body: object, page: number, limit: number, skip: number): Promise<any> {
+        try {
+            let listSegment;
+            if (page == 0) {
+                listSegment = await BannersModel.find(body);
+            } else {
+                listSegment = await BannersModel.find(body).setOptions({ skip: skip, limit: limit });
+            }
+            if (!listSegment) {
+                return [400, {
+                    message: 'There are no banners.'
+                }];
+            }
+            return [200, {
+                listSegment
             }];
         } catch (error) {
             return [500, error];
