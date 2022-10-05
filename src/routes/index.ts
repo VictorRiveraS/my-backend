@@ -1,13 +1,3 @@
-/* import { Router } from 'express'
-import saludosRoutes from './authetication/index'
-
-const router = Router()
-
-router.use('/api/saludo', saludosRoutes)
-router.use('/api/auth', AuthRouter) 
-
-export default router*/
-
 import { Router } from "express";
 
 import authorization from '../helpers/jwt';
@@ -23,5 +13,4 @@ mainRouter
     .use('/auth', AuthRouter)
     .use('/saludo', SaludosRouter)
     .use('/banners', BannersRoutes)
-    //.use('/', authorization.verifyToken)
     .use('/users', adminUsersRouter);
