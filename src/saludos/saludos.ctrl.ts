@@ -1,6 +1,3 @@
-
-
-
 /* router.get('/', async (request, response) => {
     try {
         const saludo = await Saludo.find()
@@ -9,22 +6,23 @@
         console.log(error)
     }
 
-})
+}) */
 
-router.get('/:id', async (request, response) => {
+
+/*router.get('/:id', async (request, response) => {
     try {
         const id = Number(request.params.id);
         const ids = saludos.map(saludo => saludo.id)
         const maxId = Math.max(...ids)
-         if (id < 0 || id > maxId) {
-             const err = new Error('Id Not Found');
-             err.message = 'Id Not Found';
-             err.status = 404;
-             response.status(404).json(err).end()
-         }
+        if (id < 0 || id > maxId) {
+            const err = new Error('Id Not Found');
+            err.message = 'Id Not Found';
+            err.status = 404;
+            response.status(404).json(err).end()
+        }
         //const saludo = saludos.find((res) => res.id == id)
         const saludo = await Saludo.findOne({ id: id })
-
+        
         if (saludo) {
             response.json(saludo)
         } else {
@@ -33,9 +31,9 @@ router.get('/:id', async (request, response) => {
     } catch (err) {
         console.log(err)
     }
-})
+}) */
 
-router.post('/', (request, response) => {
+/* router.post('/', (request, response) => {
     const saludo = request.body
     if (!saludo || !saludo.saludo) {
         response.status(400).json({ error: 'saludo is missing' }).end()
@@ -50,9 +48,9 @@ router.post('/', (request, response) => {
     // saludos = [...saludos, newSaludo]
     response.json(newSaludo)
     response.status(201).end()
-})
+}) */
 
-router.delete('/:id', async (request, response) => {
+/* router.delete('/:id', async (request, response) => {
     const id = Number(request.params.id)
     // const saludo = saludos.filter((res) => res.id !== id)
     // const saludo = await Saludo.findOne({ id: id })
@@ -61,39 +59,28 @@ router.delete('/:id', async (request, response) => {
     response.status(204).end()
 }) */
 
-// import { Saludo } from "../models/saludo";
-import Saludo, { SALUDO_I } from "./saludos.model";
+import service from "./saludo.service";
+import { Request, Response } from "express";
+import Handler from "../helpers/request.handler";
 
-
-class saludoService {
-    public async fecthSaludos(): Promise<any> {
+class saludoCtrl {
+    public async getAllSaludos(req: Request, res: Response): Promise<any> {
         try {
-            const saludo = await Saludo.find();
-            return [201, {
-                saludo,
-                message: 'Saludos fetched.'
-            }];
+            const saludos = await service.fecthSaludos();
+            Handler(res, saludos[0], saludos[1]);
         } catch (error) {
-            return [500, error];
+            Handler(res, 500, error);
         }
     }
 
-    public async postSaludo(newSaludo: SALUDO_I): Promise<any> {
+    public async addSaludo(req: Request, res: Response): Promise<any> {
         try {
-            const maxIdSaludo: SALUDO_I[] = await Saludo.find()?.sort({ internalId: -1 })?.limit(1);
-            let maxId: number = 1;
-            if (maxIdSaludo.length > 0) maxId = maxIdSaludo[0].internalId + 1;
-            newSaludo.internalId = maxId;
-            const newSaludoRes = await Saludo.create(newSaludo);
-            return [201, {
-                newSaludoRes,
-                message: 'Saludo created.'
-            }];
+            const newSaludo = await service.postSaludo(req.body);
+            Handler(res, newSaludo[0], newSaludo[1]);
         } catch (error) {
-            console.log(error);
-            return [500, error];
+            Handler(res, 500, error);
         }
     }
 }
 
-export default new saludoService
+export default new saludoCtrl
