@@ -1,4 +1,4 @@
-import { S3Client } from '@aws-sdk/client-s3';
+/* import { S3Client } from '@aws-sdk/client-s3';
 import { S3 } from "aws-sdk";
 import path from "path";
 import multer from "multer";
@@ -99,4 +99,4 @@ export const uploadMultiFontS3 = multer({ storage: storageMulti, limits: limits2
 export const uploadFileS3 = multer({ storage: storage, limits: limits20Mb, fileFilter: fileFilterMultimedia });
 export const uploadMultiImageS3 = multer({ storage: storageMulti, limits: limits5Mb, fileFilter: fileFilterImage });
 export const uploadMultiFileS3 = multer({ storage: storageMulti, limits: limits5Mb, fileFilter: fileFilterImageAndPDF });
-export const uploadMultiFileVideoS3 = multer({ storage: storageMulti, limits: limits20Mb, fileFilter: fileFilterVideoImageAndPDF });
+export const uploadMultiFileVideoS3 = multer({ storage: storageMulti, limits: limits20Mb, fileFilter: fileFilterVideoImageAndPDF }); */

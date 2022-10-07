@@ -1,4 +1,4 @@
-import fs from 'fs';
+/* import fs from 'fs';
 import AWS from 'aws-sdk';
 import dotenv from 'dotenv';
 import { join } from 'path';
@@ -105,4 +105,4 @@ export default class AwsBucketS3Service {
         }
     }
 
-}
+} */

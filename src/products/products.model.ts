@@ -38,4 +38,4 @@ const newsSchema = new Schema<IProducts>({
 });
 
 
-export const BannersModel = model<IProducts>('products', newsSchema);
+export const ProductsModel = model<IProducts>('products', newsSchema);

@@ -97,7 +97,6 @@ class Jwt {
             return error;
         }
     }
-
 }
 
 export default new Jwt();

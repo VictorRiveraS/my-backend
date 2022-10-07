@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import Handler from '../helpers/request.handler';
 import service from './products.service';
 import { UUIDv4 } from "uuid-v4-validator";
-class BannersCtrl {
+class ProductsCtrl {
     public async fetchProducts(req: Request, res: Response): Promise<any> {
         try {
             const page: number = Number(req.query.page);
@@ -16,7 +16,6 @@ class BannersCtrl {
                         { 'id': { '$regex': regex } },
                         { 'name': { '$regex': regex } },
                     ],
-
                 };
             } else {
                 body = {
@@ -25,7 +24,7 @@ class BannersCtrl {
             }
             const skip: number = (page - 1) * limit;
             const totalItems = await service.getBannersCount(body);
-            let response: any = await service.getBannersService(body, page, limit, skip);
+            let response: any = await service.getProductService(body, page, limit, skip);
             const data: object = {
                 totalItems: totalItems,
                 pageLength: limit,
@@ -52,7 +51,7 @@ class BannersCtrl {
         try {
             const body = req.body;
             body.banner_id = new UUIDv4().id.substring(0, 8);
-            const response = await service.createBanner(body);
+            const response = await service.createProduct(body);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
@@ -65,7 +64,7 @@ class BannersCtrl {
             delete req.body.tenantId;
             const banner_id: any = req.query.banner_id;
             const body: object = req.body;
-            const response = await service.updateBanner(banner_id, body);
+            const response = await service.updateProduct(banner_id, body);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
@@ -79,7 +78,7 @@ class BannersCtrl {
             let data: object = {
                 ...body,
             };
-            const response = await service.deleteBanner(data, banner_id);
+            const response = await service.deleteProduct(data, banner_id);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
@@ -87,4 +86,4 @@ class BannersCtrl {
     }
 }
 
-export default new BannersCtrl;
+export default new ProductsCtrl;
