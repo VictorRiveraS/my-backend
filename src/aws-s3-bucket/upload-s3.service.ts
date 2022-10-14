@@ -1,4 +1,4 @@
-/* import { S3Client } from '@aws-sdk/client-s3';
+import { S3Client } from '@aws-sdk/client-s3';
 import { S3 } from "aws-sdk";
 import path from "path";
 import multer from "multer";
@@ -15,8 +15,8 @@ const s3 = new S3Client({
 });
 const limits20Mb = { fileSize: 20 * 1024 * 1024 };
 const limits5Mb = { fileSize: 5 * 1024 * 1024 };
-const limits2Mb = { fileSize: 2 * 1024 * 1024 }; */
-/*
+const limits2Mb = { fileSize: 2 * 1024 * 1024 };
+
 const storage = multerS3({
     s3: s3,
     bucket: AWS_S3_BUCKET,
@@ -35,7 +35,7 @@ const storage = multerS3({
     }
 });
 
-const storageMulti = multerS3({
+/* const storageMulti = multerS3({
     s3: s3,
     bucket: AWS_S3_BUCKET,
     acl: 'public-read',
@@ -52,7 +52,7 @@ const storageMulti = multerS3({
         var fullPath = paths3 + type + "_" + fieldname + ext;
         cb(null, fullPath)
     }
-});
+}); */
 
 const fileFilterImage = function (req, file, cb) {
     var ext = path.extname(file.originalname);
@@ -95,8 +95,8 @@ const fileFilterFont = function (req, file, cb) {
 };
 
 export const uploadImageS3 = multer({ storage: storage, limits: limits5Mb, fileFilter: fileFilterImage });
-export const uploadMultiFontS3 = multer({ storage: storageMulti, limits: limits2Mb, fileFilter: fileFilterFont });
+/* export const uploadMultiFontS3 = multer({ storage: storageMulti, limits: limits2Mb, fileFilter: fileFilterFont }); */
 export const uploadFileS3 = multer({ storage: storage, limits: limits20Mb, fileFilter: fileFilterMultimedia });
-export const uploadMultiImageS3 = multer({ storage: storageMulti, limits: limits5Mb, fileFilter: fileFilterImage });
+/* export const uploadMultiImageS3 = multer({ storage: storageMulti, limits: limits5Mb, fileFilter: fileFilterImage });
 export const uploadMultiFileS3 = multer({ storage: storageMulti, limits: limits5Mb, fileFilter: fileFilterImageAndPDF });
 export const uploadMultiFileVideoS3 = multer({ storage: storageMulti, limits: limits20Mb, fileFilter: fileFilterVideoImageAndPDF }); */

@@ -6,7 +6,6 @@
     "scripts": {
         "dev": "nodemon",
         "lint": "eslint .",
-        "start": "node src/index",
         "test": "standard && node scr/index",
         "standart": "standard",
         "serve": "node build/index.js",

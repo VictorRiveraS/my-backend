@@ -41,7 +41,6 @@ class ProductsCtrl {
     public async getProductsById(req: Request, res: Response): Promise<any> {
         try {
             const product_id = req.params.product_id;
-            console.log(product_id);
             let response: any = await service.getProductByIdService(product_id);
             Handler(res, response[0], response[1])
         } catch (error) {

@@ -1,11 +1,11 @@
-/* import fs from 'fs';
+import fs from 'fs';
 import AWS from 'aws-sdk';
 import dotenv from 'dotenv';
 import { join } from 'path';
 import { AWS_S3_ACCESS_KEY_ID, AWS_S3_SECRET_ACCESS_KEY, AWS_S3_REGION } from '../config/env';
 
-dotenv.config({ path: join(__dirname, '../../', `.env.${process.env.NODE_ENV || 'local'}`) }); */
-/*
+dotenv.config({ path: join(__dirname, '../../', `.env.${process.env.NODE_ENV || 'local'}`) });
+
 export default class AwsBucketS3Service {
 
     public static async uploadToFilesS3(bucketS3AWS: string, routeName: string, tempFilePath: string): Promise<any> {
@@ -105,4 +105,4 @@ export default class AwsBucketS3Service {
         }
     }
 
-} */
+} 
