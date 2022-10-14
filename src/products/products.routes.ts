@@ -7,7 +7,7 @@ export const ProductsRoutes = Router();
 
 ProductsRoutes
     .get('/', RouteValidator.validate, ctrl.fetchProducts)
-    .get('/id', productValidator, RouteValidator.validate, ctrl.getProductsById)
+    .get('/:product_id', productValidator, RouteValidator.validate, ctrl.getProductsById)
     .post('/', RouteValidator.validate, ctrl.createProducts)
     .patch('/', productValidator, RouteValidator.validate, ctrl.updateProducts)
     .delete('/', productValidator, RouteValidator.validate, ctrl.deleteProducts);

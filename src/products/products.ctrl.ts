@@ -23,7 +23,7 @@ class ProductsCtrl {
                 }
             }
             const skip: number = (page - 1) * limit;
-            const totalItems = await service.getBannersCount(body);
+            const totalItems = await service.getProductsCount(body);
             let response: any = await service.getProductService(body, page, limit, skip);
             const data: object = {
                 totalItems: totalItems,
@@ -40,8 +40,10 @@ class ProductsCtrl {
 
     public async getProductsById(req: Request, res: Response): Promise<any> {
         try {
-            /*  const response = await service.forgotPassword(req.body.email);
-             Handler(res, response[0], response[1]); */
+            const product_id = req.params.product_id;
+            console.log(product_id);
+            let response: any = await service.getProductByIdService(product_id);
+            Handler(res, response[0], response[1])
         } catch (error) {
             Handler(res, 500, error);
         }
@@ -50,7 +52,7 @@ class ProductsCtrl {
     public async createProducts(req: Request, res: Response): Promise<any> {
         try {
             const body = req.body;
-            body.banner_id = new UUIDv4().id.substring(0, 8);
+            body.product_id = new UUIDv4().id.substring(0, 8);
             const response = await service.createProduct(body);
             Handler(res, response[0], response[1]);
         } catch (error) {
@@ -62,9 +64,9 @@ class ProductsCtrl {
         try {
             delete req.body.isDeleted;
             delete req.body.tenantId;
-            const banner_id: any = req.query.banner_id;
+            const product_id: any = req.query.product_id;
             const body: object = req.body;
-            const response = await service.updateProduct(banner_id, body);
+            const response = await service.updateProduct(product_id, body);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
@@ -73,12 +75,12 @@ class ProductsCtrl {
 
     public async deleteProducts(req: Request, res: Response): Promise<any> {
         try {
-            const banner_id: any = req.query.banner_id;
+            const product_id: any = req.query.product_id;
             const body: object = req.body;
             let data: object = {
                 ...body,
             };
-            const response = await service.deleteProduct(data, banner_id);
+            const response = await service.deleteProduct(data, product_id);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);

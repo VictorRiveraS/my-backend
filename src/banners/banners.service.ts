@@ -6,6 +6,8 @@ class BannersService {
     public async createBanner(body: any): Promise<any> {
         try {
             console.log(body.banner_id);
+            console.log(body);
+
             const create_banner: any = await BannersModel.create(body);
             return [201, { message: 'banner added', create_banner }];
         } catch (error) {

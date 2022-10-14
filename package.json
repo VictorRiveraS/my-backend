@@ -1,7 +1,7 @@
 {
-    "name": "jv-backend-app",
+    "name": "mali-optica-app",
     "version": "1.0.0",
-    "description": "Backend for Jv App",
+    "description": "Backend for Mali Optica App",
     "main": "index",
     "scripts": {
         "dev": "nodemon",
@@ -17,7 +17,6 @@
     "devDependencies": {
         "@types/bcryptjs": "2.4.2",
         "@types/express": "4.17.13",
-        "@types/typescript": "2.0.0",
         "nodemon": "2.0.19",
         "standard": "17.0.0"
     },

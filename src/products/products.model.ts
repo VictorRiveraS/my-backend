@@ -2,9 +2,12 @@ import { model, Schema } from "mongoose";
 
 export interface IProducts {
     product_id: string | null | undefined;
-    name: string;
-    image: string;
-    link_banner: string;
+    product_name: string;
+    product_lab: string;
+    product_category: string;
+    product_image: string;
+    product_price: number;
+    product_sku: string;
     created_at?: Date;
     updated_at?: Date;
     created_by?: string;
@@ -16,13 +19,29 @@ const newsSchema = new Schema<IProducts>({
         type: String,
         required: false
     },
-    name: {
+    product_name: {
         type: String,
-        required: [true, 'Prouct name is required.']
+        required: [true, 'Product name is required.']
     },
-    link_banner: {
+    product_lab: {
         type: String,
-        required: false
+        required: [true, 'Product labratory is required.']
+    },
+    product_category: {
+        type: String,
+        required: [true, 'Product labratory is required.']
+    },
+    product_image: {
+        type: String,
+        required: [true, 'Product image is required.']
+    },
+    product_price: {
+        type: Number,
+        required: [true, 'Product price is required.']
+    },
+    product_sku: {
+        type: String,
+        required: [true, 'Product sku is required.']
     },
     created_by: {
         type: String,
