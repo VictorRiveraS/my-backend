@@ -1,4 +1,4 @@
-import { S3Client } from '@aws-sdk/client-s3';
+/* import { S3Client } from '@aws-sdk/client-s3';
 import { S3 } from "aws-sdk";
 import path from "path";
 import multer from "multer";
@@ -15,7 +15,7 @@ const s3 = new S3Client({
 });
 const limits20Mb = { fileSize: 20 * 1024 * 1024 };
 const limits5Mb = { fileSize: 5 * 1024 * 1024 };
-const limits2Mb = { fileSize: 2 * 1024 * 1024 };
+const limits2Mb = { fileSize: 2 * 1024 * 1024 }; */
 /*
 const storage = multerS3({
     s3: s3,
