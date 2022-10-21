@@ -1,10 +1,10 @@
-import { categorysModel } from './categories.model';
+import { categoriesModel } from './categories.model';
 
-class BannersService {
+class CategoriesService {
     public async createCategories(body: any): Promise<any> {
         try {
-            const create_banner: any = await categorysModel.create(body);
-            return [201, { message: 'banner added', create_banner }];
+            const create_category: any = await categoriesModel.create(body);
+            return [201, { message: 'category added', create_category }];
         } catch (error) {
             return [500, error];
         }
@@ -12,8 +12,8 @@ class BannersService {
 
     public async categoryExist(category_id: string): Promise<any> {
         try {
-            const banners = await categorysModel.find({ category_id: category_id });
-            if (banners.length > 0) {
+            const category = await categoriesModel.find({ category_id: category_id });
+            if (category.length > 0) {
                 return true;
             } else {
                 return false;
@@ -25,18 +25,18 @@ class BannersService {
 
     public async updateCategory(category_id: string, body: any): Promise<any> {
         try {
-            const bannerExist: boolean = await this.categoryExist(category_id);
-            if (!bannerExist) {
-                return [404, { message: "Banner not found." }]
+            const categoryExist: boolean = await this.categoryExist(category_id);
+            if (!categoryExist) {
+                return [404, { message: "Category not found." }]
             }
-            const edit_banner = await categorysModel.findOneAndUpdate({ category_id: category_id }, body).setOptions({ new: true });
-            if (!edit_banner) {
+            const edit_category = await categoriesModel.findOneAndUpdate({ category_id: category_id }, body).setOptions({ new: true });
+            if (!edit_category) {
                 return [401, {
-                    message: 'News not update'
+                    message: 'Category not update'
                 }];
             }
             return [200, {
-                edit_banner
+                edit_category: edit_category
             }]
         } catch (error) {
             return [500, error];
@@ -45,18 +45,18 @@ class BannersService {
 
     public async deleteCategories(body: object, category_id: string): Promise<any> {
         try {
-            const bannerExist: boolean = await this.categoryExist(category_id);
-            if (!bannerExist) {
-                return [404, { message: "Banner not found." }]
+            const categoryExist: boolean = await this.categoryExist(category_id);
+            if (!categoryExist) {
+                return [404, { message: "Category not found." }]
             }
-            const delete_banner_remove = await categorysModel.findOneAndDelete({ category_id: category_id }, body)
-            if (!delete_banner_remove) {
+            const delete_category_remove = await categoriesModel.findOneAndDelete({ category_id: category_id }, body)
+            if (!delete_category_remove) {
                 return [400, {
-                    message: 'Banner not delete'
+                    message: 'Category not delete'
                 }];
             }
             return [200, {
-                message: 'Banner deleted', delete_banner_remove
+                message: 'Category deleted', delete_category_remove: delete_category_remove
             }];
         } catch (error) {
             return [500, error];
@@ -65,7 +65,7 @@ class BannersService {
 
     public async getCategoriesCount(body: object): Promise<any> {
         try {
-            let segmentCount: number = await categorysModel.find(body).count();
+            let segmentCount: number = await categoriesModel.find(body).count();
             return segmentCount
         } catch (error) {
             throw error;
@@ -76,13 +76,13 @@ class BannersService {
         try {
             let listSegment;
             if (page == 0) {
-                listSegment = await categorysModel.find(body);
+                listSegment = await categoriesModel.find(body);
             } else {
-                listSegment = await categorysModel.find(body).setOptions({ skip: skip, limit: limit });
+                listSegment = await categoriesModel.find(body).setOptions({ skip: skip, limit: limit });
             }
             if (!listSegment) {
                 return [400, {
-                    message: 'There are no banners.'
+                    message: 'There are no categories.'
                 }];
             }
             return [200, {
@@ -95,9 +95,9 @@ class BannersService {
 
     public async addCategoriesImage(file: any, category_id: string): Promise<any> {
         try {
-            const existNews: any = await categorysModel.findOne({ category_id: category_id });
-            if (!existNews) {
-                return [404, { message: "The banner not found." }]
+            const existCategory: any = await categoriesModel.findOne({ category_id: category_id });
+            if (!existCategory) {
+                return [404, { message: "The category not found." }]
             }
             if (file === undefined) {
                 return [500, {
@@ -105,9 +105,9 @@ class BannersService {
                 }]
             }
             let response = file.location + "?t=" + Date.now();;
-            const picture = await categorysModel.findOneAndUpdate({ category_id: category_id }, { banner_image: response }, { upsert: true, new: true });
+            const picture = await categoriesModel.findOneAndUpdate({ category_id: category_id }, { category_image: response }, { upsert: true, new: true });
             return [201, {
-                message: "Banner image updated.", picture
+                message: "Category image updated.", picture
             }];
         } catch (error) {
             return [500, error];
@@ -115,4 +115,4 @@ class BannersService {
     }
 }
 
-export default new BannersService;
+export default new CategoriesService;

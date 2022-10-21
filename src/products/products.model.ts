@@ -4,7 +4,11 @@ export interface IProducts {
     product_id: string | null | undefined;
     product_name: string;
     product_lab: string;
+    product_lab_id: string;
     product_category: string;
+    product_category_id: string;
+    product_brand: string;
+    product_brand_id: string;
     product_image: string;
     product_price: number;
     product_sku: string;
@@ -27,9 +31,25 @@ const newsSchema = new Schema<IProducts>({
         type: String,
         required: [true, 'Product labratory is required.']
     },
+    product_lab_id: {
+        type: String,
+        required: [true, 'Product labratory id is required.']
+    },
     product_category: {
         type: String,
-        required: [true, 'Product labratory is required.']
+        required: [true, 'Product category is required.']
+    },
+    product_category_id: {
+        type: String,
+        required: [true, 'Product category id is required.']
+    },
+    product_brand: {
+        type: String,
+        required: [true, 'Product brand is required.']
+    },
+    product_brand_id: {
+        type: String,
+        required: [true, 'Product brand id is required.']
     },
     product_image: {
         type: String,

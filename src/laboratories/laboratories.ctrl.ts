@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import Handler from '../helpers/request.handler';
-import service from './categories.service';
+import service from './laboratories.service';
 import { UUIDv4 } from "uuid-v4-validator";
 
-class CategoriesCtrl {
-    public async fetchCategories(req: Request, res: Response): Promise<any> {
+class BrandsCtrl {
+    public async fetchBrands(req: Request, res: Response): Promise<any> {
         try {
             const page: number = Number(req.query.page);
             const limit: any = Number(req.query.limit);
@@ -22,8 +22,8 @@ class CategoriesCtrl {
                 body = {}
             }
             const skip: number = (page - 1) * limit;
-            const totalItems = await service.getCategoriesCount(body);
-            let response: any = await service.getCategoriesService(body, page, limit, skip);
+            const totalItems = await service.getLaboratoriesCount(body);
+            let response: any = await service.getLaboratoriesService(body, page, limit, skip);
             const data: object = {
                 totalItems: totalItems,
                 pageLength: limit,
@@ -37,7 +37,7 @@ class CategoriesCtrl {
         }
     }
 
-    public async getCategoriesById(req: Request, res: Response): Promise<any> {
+    public async getBrandsById(req: Request, res: Response): Promise<any> {
         try {
             /*  const response = await service.forgotPassword(req.body.email);
              Handler(res, response[0], response[1]); */
@@ -46,49 +46,49 @@ class CategoriesCtrl {
         }
     }
 
-    public async createCategories(req: Request, res: Response): Promise<any> {
+    public async createBrands(req: Request, res: Response): Promise<any> {
         try {
             const body = req.body;
             body.category_id = new UUIDv4().id.substring(0, 8);
-            const response = await service.createCategories(body);
+            const response = await service.createLaboratories(body);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
         }
     }
 
-    public async addCategoriesImage(req: Request | any, res: Response): Promise<any> {
+    public async addBrandsImage(req: Request | any, res: Response): Promise<any> {
         try {
             const category_id: any = req.query.category_id;
             const image: any = req.file;
-            const response = await service.addCategoriesImage(image, category_id);
+            const response = await service.addLaboratoriesImage(image, category_id);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
         }
     }
 
-    public async updateCategories(req: Request, res: Response): Promise<any> {
+    public async updateBrands(req: Request, res: Response): Promise<any> {
         try {
             delete req.body.isDeleted;
             delete req.body.tenantId;
             const category_id: any = req.query.category_id;
             const body: object = req.body;
-            const response = await service.updateCategory(category_id, body);
+            const response = await service.updateLaboratories(category_id, body);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
         }
     }
 
-    public async deleteCategories(req: Request, res: Response): Promise<any> {
+    public async deleteBrands(req: Request, res: Response): Promise<any> {
         try {
             const category_id: any = req.query.category_id;
             const body: object = req.body;
             let data: object = {
                 ...body,
             };
-            const response = await service.deleteCategories(data, category_id);
+            const response = await service.deleteLaboratory(data, category_id);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
@@ -104,7 +104,7 @@ class CategoriesCtrl {
                 Handler(res, 500, { message: "The request is incomplete." + type });
                 return false;
             }
-            req.params.route_upload_s3 = 'Categories' + "/" + type + "/" + category_id + "/";
+            req.params.route_upload_s3 = 'Brands' + "/" + type + "/" + category_id + "/";
             req.params.type_upload_s3 = type;
             next();
         } catch (error) {
@@ -113,4 +113,4 @@ class CategoriesCtrl {
     }
 }
 
-export default new CategoriesCtrl;
+export default new BrandsCtrl;

@@ -1,31 +1,31 @@
 import { model, Schema } from "mongoose";
 
-export interface ICategories {
-    category_id: string | null | undefined;
-    category_name: string;
-    category_image: string;
-    category_type: string;
+export interface ILaboratory {
+    laboratory_id: string | null | undefined;
+    laboratory_name: string;
+    laboratory_image: string;
+    laboratory_type: string;
     created_at?: Date;
     updated_at?: Date;
     created_by?: string;
     updated_by?: string;
 }
 
-const newsSchema = new Schema<ICategories>(
+const newsSchema = new Schema<ILaboratory>(
     {
-        category_id: {
+        laboratory_id: {
             type: String,
             required: false
         },
-        category_name: {
+        laboratory_name: {
             type: String,
-            required: [true, 'Category name is required.']
+            required: [true, 'Laboratory name is required.']
         },
-        category_image: {
+        laboratory_image: {
             type: String,
             required: false
         },
-        category_type: {
+        laboratory_type: {
             type: String,
             required: false
         },
@@ -44,4 +44,4 @@ const newsSchema = new Schema<ICategories>(
 );
 
 
-export const categoriesModel = model<ICategories>('categories', newsSchema);
+export const laboratoriesModel = model<ILaboratory>('laboratories', newsSchema);

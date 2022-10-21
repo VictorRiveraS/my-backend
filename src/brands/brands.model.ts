@@ -1,31 +1,31 @@
 import { model, Schema } from "mongoose";
 
-export interface ICategories {
-    category_id: string | null | undefined;
-    category_name: string;
-    category_image: string;
-    category_type: string;
+export interface IBrands {
+    brand_id: string | null | undefined;
+    brand_name: string;
+    brand_image: string;
+    brand_type: string;
     created_at?: Date;
     updated_at?: Date;
     created_by?: string;
     updated_by?: string;
 }
 
-const newsSchema = new Schema<ICategories>(
+const newsSchema = new Schema<IBrands>(
     {
-        category_id: {
+        brand_id: {
             type: String,
             required: false
         },
-        category_name: {
+        brand_name: {
             type: String,
-            required: [true, 'Category name is required.']
+            required: [true, 'Brand name is required.']
         },
-        category_image: {
+        brand_image: {
             type: String,
             required: false
         },
-        category_type: {
+        brand_type: {
             type: String,
             required: false
         },
@@ -44,4 +44,4 @@ const newsSchema = new Schema<ICategories>(
 );
 
 
-export const categoriesModel = model<ICategories>('categories', newsSchema);
+export const brandsModel = model<IBrands>('brands', newsSchema);
