@@ -13,7 +13,6 @@ RUN apk upgrade --update \
     /var/cache/apk/*
 RUN npm install
 EXPOSE 3000
-RUN npm run build
 RUN mkdir /logs
 RUN chmod 777 -R /logs
 RUN chown -R node: /logs
