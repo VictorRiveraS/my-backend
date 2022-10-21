@@ -13,11 +13,11 @@ const s3 = new S3Client({
         secretAccessKey: AWS_S3_SECRET_ACCESS_KEY
     }
 });
-const limits20Mb = { fileSize: 20 * 1024 * 1024 };
+/* const limits20Mb = { fileSize: 20 * 1024 * 1024 };
 const limits5Mb = { fileSize: 5 * 1024 * 1024 };
-const limits2Mb = { fileSize: 2 * 1024 * 1024 };
+const limits2Mb = { fileSize: 2 * 1024 * 1024 }; */
 
-const storage = multerS3({
+/* const storage = multerS3({
     s3: s3,
     bucket: AWS_S3_BUCKET,
     acl: 'public-read',
@@ -33,7 +33,7 @@ const storage = multerS3({
         var fullPath = paths3 + type + ext;
         cb(null, fullPath)
     }
-});
+}); */
 
 /* const storageMulti = multerS3({
     s3: s3,
@@ -54,7 +54,7 @@ const storage = multerS3({
     }
 }); */
 
-const fileFilterImage = function (req, file, cb) {
+/* const fileFilterImage = function (req, file, cb) {
     var ext = path.extname(file.originalname);
     if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
         return cb(new Error('Only images are allowed.'))
@@ -92,11 +92,11 @@ const fileFilterFont = function (req, file, cb) {
         return cb(new Error('Only fonts are allowed.'))
     }
     cb(null, true)
-};
+}; */
 
-export const uploadImageS3 = multer({ storage: storage, limits: limits5Mb, fileFilter: fileFilterImage });
+/* export const uploadImageS3 = multer({ storage: storage, limits: limits5Mb, fileFilter: fileFilterImage }); */
 /* export const uploadMultiFontS3 = multer({ storage: storageMulti, limits: limits2Mb, fileFilter: fileFilterFont }); */
-export const uploadFileS3 = multer({ storage: storage, limits: limits20Mb, fileFilter: fileFilterMultimedia });
+/* export const uploadFileS3 = multer({ storage: storage, limits: limits20Mb, fileFilter: fileFilterMultimedia }); */
 /* export const uploadMultiImageS3 = multer({ storage: storageMulti, limits: limits5Mb, fileFilter: fileFilterImage });
 export const uploadMultiFileS3 = multer({ storage: storageMulti, limits: limits5Mb, fileFilter: fileFilterImageAndPDF });
 export const uploadMultiFileVideoS3 = multer({ storage: storageMulti, limits: limits20Mb, fileFilter: fileFilterVideoImageAndPDF }); */
