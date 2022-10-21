@@ -8,4 +8,12 @@ export const categoriesValidator = [
 
 export const addCategoryImageValidator = [
     validator('image').not().isMimeType().withMessage('Image is required.')
+];
+
+export const subcategoriesValidator = [
+    validator("subcategory_id").notEmpty().optional().withMessage("Subcategory id is required")
+]
+
+export const addSubcategoryImageValidator = [
+    validator('image').not().isMimeType().withMessage('Image is required.')
 ]; 

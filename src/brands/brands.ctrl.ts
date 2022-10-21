@@ -49,7 +49,7 @@ class BrandsCtrl {
     public async createBrands(req: Request, res: Response): Promise<any> {
         try {
             const body = req.body;
-            body.category_id = new UUIDv4().id.substring(0, 8);
+            body.brand_id = new UUIDv4().id.substring(0, 8);
             const response = await service.createBrands(body);
             Handler(res, response[0], response[1]);
         } catch (error) {
@@ -59,9 +59,9 @@ class BrandsCtrl {
 
     public async addBrandsImage(req: Request | any, res: Response): Promise<any> {
         try {
-            const category_id: any = req.query.category_id;
+            const brand_id: any = req.query.brand_id;
             const image: any = req.file;
-            const response = await service.addBrandsImage(image, category_id);
+            const response = await service.addBrandsImage(image, brand_id);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
@@ -72,9 +72,9 @@ class BrandsCtrl {
         try {
             delete req.body.isDeleted;
             delete req.body.tenantId;
-            const category_id: any = req.query.category_id;
+            const brand_id: any = req.query.brand_id;
             const body: object = req.body;
-            const response = await service.updateBrands(category_id, body);
+            const response = await service.updateBrands(brand_id, body);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
@@ -83,12 +83,12 @@ class BrandsCtrl {
 
     public async deleteBrands(req: Request, res: Response): Promise<any> {
         try {
-            const category_id: any = req.query.category_id;
+            const brand_id: any = req.query.brand_id;
             const body: object = req.body;
             let data: object = {
                 ...body,
             };
-            const response = await service.deleteBrands(data, category_id);
+            const response = await service.deleteBrands(data, brand_id);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
@@ -97,14 +97,14 @@ class BrandsCtrl {
 
     public async setInfoUpload(req: any, res: Response, next: NextFunction): Promise<any> {
         try {
-            const allowedTypes = ["principal_category", "secundary_category"];
-            const category_id: any = req.query.category_id;
+            const allowedTypes = ["brand"];
+            const brand_id: any = req.query.brand_id;
             const type: string = req.query.type === undefined ? "" : String(req.query.type);
             if (type === "" || !allowedTypes.includes(type)) {
                 Handler(res, 500, { message: "The request is incomplete." + type });
                 return false;
             }
-            req.params.route_upload_s3 = 'Brands' + "/" + type + "/" + category_id + "/";
+            req.params.route_upload_s3 = 'Brands' + "/" + type + "/" + brand_id + "/";
             req.params.type_upload_s3 = type;
             next();
         } catch (error) {

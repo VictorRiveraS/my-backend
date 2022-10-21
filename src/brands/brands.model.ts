@@ -4,7 +4,6 @@ export interface IBrands {
     brand_id: string | null | undefined;
     brand_name: string;
     brand_image: string;
-    brand_type: string;
     created_at?: Date;
     updated_at?: Date;
     created_by?: string;
@@ -22,10 +21,6 @@ const newsSchema = new Schema<IBrands>(
             required: [true, 'Brand name is required.']
         },
         brand_image: {
-            type: String,
-            required: false
-        },
-        brand_type: {
             type: String,
             required: false
         },
