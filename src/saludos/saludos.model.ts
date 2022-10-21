@@ -1,8 +1,8 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 export interface SALUDO_I {
-    saludo: String,
-    lastNames: String,
+    saludo: string,
+    lastNames: string,
     internalId: number
 }
 

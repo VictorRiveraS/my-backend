@@ -3,7 +3,7 @@ import { ProductsModel } from './products.model';
 class productsService {
 
 
-    public async createProduct(body: any): Promise<any> {
+    public async createProduct(body: any): Promise<Array<any>> {
         try {
             const create_product: any = await ProductsModel.create(body);
             return [201, { message: 'Product added', create_product }];
@@ -12,7 +12,7 @@ class productsService {
         }
     }
 
-    public async productExist(product_id: string): Promise<any> {
+    public async productExist(product_id: string): Promise<boolean | Array<any>> {
         try {
             const products = await ProductsModel.find({ product_id: product_id });
             if (products.length > 0) {
@@ -25,9 +25,9 @@ class productsService {
         }
     }
 
-    public async updateProduct(product_id: string, body: any): Promise<any> {
+    public async updateProduct(product_id: string, body: any): Promise<Array<any>> {
         try {
-            const productExist: boolean = await this.productExist(product_id);
+            const productExist: boolean | any[] = await this.productExist(product_id);
             if (!productExist) {
                 return [404, { message: "product not found." }]
             }
@@ -45,9 +45,9 @@ class productsService {
         }
     }
 
-    public async deleteProduct(body: object, product_id: string): Promise<any> {
+    public async deleteProduct(body: object, product_id: string): Promise<Array<any>> {
         try {
-            const productExist: boolean = await this.productExist(product_id);
+            const productExist: boolean | Array<any> = await this.productExist(product_id);
             if (!productExist) {
                 return [404, { message: "Product not found." }]
             }
@@ -65,7 +65,7 @@ class productsService {
         }
     }
 
-    public async getProductsCount(body: object): Promise<any> {
+    public async getProductsCount(body: object): Promise<number> {
         try {
             let segmentCount: number = await ProductsModel.find(body).count();
             return segmentCount
@@ -74,7 +74,7 @@ class productsService {
         }
     }
 
-    public async getProductService(body: object, page: number, limit: number, skip: number): Promise<any> {
+    public async getProductService(body: object, page: number, limit: number, skip: number): Promise<Array<any>> {
         try {
             let listSegment;
             if (page == 0) {
@@ -95,7 +95,7 @@ class productsService {
         }
     }
 
-    public async getProductByIdService(product_id: string): Promise<any> {
+    public async getProductByIdService(product_id: string): Promise<Array<any>> {
         try {
             const products = await ProductsModel.find({ product_id: product_id });
             if (!products) {

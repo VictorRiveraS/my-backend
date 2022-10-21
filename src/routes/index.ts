@@ -1,7 +1,4 @@
 import { Router } from "express";
-
-import authorization from '../helpers/jwt';
-
 import { AuthRouter } from "../auth/auth.routes";
 import { SaludosRouter } from "../saludos/saludos.routes";
 import { adminUsersRouter } from "../users/users.routes";
@@ -15,4 +12,4 @@ mainRouter
     .use('/saludo', SaludosRouter)
     .use('/banners', BannersRoutes)
     .use('/products', ProductsRoutes)
-    .use('/users', adminUsersRouter);
+    .use('/users', adminUsersRouter)

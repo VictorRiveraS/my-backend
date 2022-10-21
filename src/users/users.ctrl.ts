@@ -4,7 +4,7 @@ import service from '../users/users.service';
 
 class AdminUsersCtrl {
 
-    public async changePassword(req: Request, res: Response): Promise<any> {
+    public async changePassword(req: Request, res: Response): Promise<void> {
         try {
             let { email } = req.query;
             email = String(email).replace(' ', '+');

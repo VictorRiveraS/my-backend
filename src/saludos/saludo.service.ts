@@ -1,6 +1,6 @@
 import Saludo, { SALUDO_I } from "./saludos.model";
 class saludoService {
-    public async fecthSaludos(): Promise<any> {
+    public async fecthSaludos(): Promise<Array<any>> {
         try {
             const saludo = await Saludo.find();
             return [201, {
@@ -12,7 +12,7 @@ class saludoService {
         }
     }
 
-    public async postSaludo(newSaludo: SALUDO_I): Promise<any> {
+    public async postSaludo(newSaludo: SALUDO_I): Promise<Array<any>> {
         try {
             const maxIdSaludo: SALUDO_I[] = await Saludo.find()?.sort({ internalId: -1 })?.limit(1);
             let maxId: number = 1;
