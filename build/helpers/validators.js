@@ -9,9 +9,8 @@ class RouteValidator {
     async validate(req, res, next) {
         try {
             const errors = (0, express_validator_1.validationResult)(req);
-            if (!errors.isEmpty()) {
+            if (!errors.isEmpty())
                 return (0, request_handler_1.default)(res, 422, { error: errors.array()[0].msg });
-            }
             next();
         }
         catch (error) {

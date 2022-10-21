@@ -15,9 +15,25 @@ const newsSchema = new mongoose_1.Schema({
         type: String,
         required: [true, 'Product labratory is required.']
     },
+    product_lab_id: {
+        type: String,
+        required: [true, 'Product labratory id is required.']
+    },
     product_category: {
         type: String,
-        required: [true, 'Product labratory is required.']
+        required: [true, 'Product category is required.']
+    },
+    product_category_id: {
+        type: String,
+        required: [true, 'Product category id is required.']
+    },
+    product_brand: {
+        type: String,
+        required: [true, 'Product brand is required.']
+    },
+    product_brand_id: {
+        type: String,
+        required: [true, 'Product brand id is required.']
     },
     product_image: {
         type: String,

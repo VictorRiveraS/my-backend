@@ -31,9 +31,8 @@ class AdminAuthCtrl {
             let { token, email } = req.query;
             email = String(email).replace(' ', '+');
             const isValidToken = jwt_1.default.verifyJWT({ token: String(token), secret: env_1.JWT_SECRET });
-            if (!isValidToken) {
+            if (!isValidToken)
                 return (0, request_handler_1.default)(res, 401, { error: 'Token expired.' });
-            }
             const response = await auth_service_1.default.resetPassword(req.body.new_password, String(email));
             (0, request_handler_1.default)(res, response[0], response[1]);
         }
