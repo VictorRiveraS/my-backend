@@ -59,7 +59,7 @@ class BannersCtrl {
         }
     }
 
-    public async addNewsImage(req: Request | any, res: Response): Promise<any> {
+    public async addBannerImage(req: Request | any, res: Response): Promise<any> {
         try {
             const banner_id: any = req.query.banner_id;
             const image: any = req.file;

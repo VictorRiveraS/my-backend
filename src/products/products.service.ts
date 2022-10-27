@@ -110,6 +110,27 @@ class productsService {
             return [500, error];
         }
     }
+
+    public async addProductImage(image: any, product_id: string): Promise<any> {
+        try {
+            const existNews: any = await ProductsModel.findOne({ product_id: product_id });
+            if (!existNews) {
+                return [404, { message: "The product not found." }]
+            }
+            if (image === undefined) {
+                return [500, {
+                    message: "Archivo subido sin exito"
+                }]
+            }
+            let response = image.location + "?t=" + Date.now();;
+            const picture = await ProductsModel.findOneAndUpdate({ product_id: product_id }, { product_image: response }, { upsert: true, new: true });
+            return [201, {
+                message: "Banner image updated.", picture
+            }];
+        } catch (error) {
+            return [500, error];
+        }
+    }
 }
 
 export default new productsService;

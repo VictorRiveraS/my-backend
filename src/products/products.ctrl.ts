@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import Handler from '../helpers/request.handler';
 import service from './products.service';
 import { UUIDv4 } from "uuid-v4-validator";
@@ -81,6 +81,35 @@ class ProductsCtrl {
             };
             const response = await service.deleteProduct(data, product_id);
             Handler(res, response[0], response[1]);
+        } catch (error) {
+            Handler(res, 500, error);
+        }
+    }
+
+
+    public async addProductImage(req: Request | any, res: Response): Promise<any> {
+        try {
+            const product_id: any = req.query.product_id;
+            const image: any = req.file;
+            const response = await service.addProductImage(image, product_id);
+            Handler(res, response[0], response[1]);
+        } catch (error) {
+            Handler(res, 500, error);
+        }
+    }
+
+    public async setInfoUpload(req: any, res: Response, next: NextFunction): Promise<any> {
+        try {
+            const allowedTypes = ["principal_product"];
+            const product_id: any = req.query.product_id;
+            const type: string = req.query.type === undefined ? "" : String(req.query.type);
+            if (type === "" || !allowedTypes.includes(type)) {
+                Handler(res, 500, { message: "The request is incomplete." + type });
+                return false;
+            }
+            req.params.route_upload_s3 = 'Products' + "/" + type + "/" + product_id + "/";
+            req.params.type_upload_s3 = type;
+            next();
         } catch (error) {
             Handler(res, 500, error);
         }

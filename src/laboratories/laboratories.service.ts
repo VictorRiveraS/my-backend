@@ -3,8 +3,8 @@ import { laboratoriesModel } from './laboratories.model';
 class LaboratoriesService {
     public async createLaboratories(body: any): Promise<any> {
         try {
-            const create_brand: any = await laboratoriesModel.create(body);
-            return [201, { message: 'Laboratory added', create_brand }];
+            const create_laboratory: any = await laboratoriesModel.create(body);
+            return [201, { message: 'Laboratory added', create_laboratory }];
         } catch (error) {
             return [500, error];
         }
@@ -47,7 +47,7 @@ class LaboratoriesService {
         try {
             const laboratoryExist: boolean = await this.laboratoryExist(laboratory_id);
             if (!laboratoryExist) {
-                return [404, { message: "Brand not found." }]
+                return [404, { message: "Laboratory not found." }]
             }
             const delete_laboratory_remove = await laboratoriesModel.findOneAndDelete({ laboratory_id: laboratory_id }, body)
             if (!delete_laboratory_remove) {

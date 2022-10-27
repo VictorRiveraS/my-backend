@@ -4,7 +4,6 @@ export interface ILaboratory {
     laboratory_id: string | null | undefined;
     laboratory_name: string;
     laboratory_image: string;
-    laboratory_type: string;
     created_at?: Date;
     updated_at?: Date;
     created_by?: string;
@@ -22,10 +21,6 @@ const newsSchema = new Schema<ILaboratory>(
             required: [true, 'Laboratory name is required.']
         },
         laboratory_image: {
-            type: String,
-            required: false
-        },
-        laboratory_type: {
             type: String,
             required: false
         },

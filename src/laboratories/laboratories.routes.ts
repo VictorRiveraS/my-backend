@@ -7,9 +7,9 @@ import { uploadImageS3 } from '../aws-s3-bucket/upload-s3.service';
 export const LaboratoriesRoutes = Router();
 
 LaboratoriesRoutes
-    .get('/', RouteValidator.validate, ctrl.fetchBrands)
-    .get('/id', laboratoriesValidator, RouteValidator.validate, ctrl.getBrandsById)
-    .post('/', RouteValidator.validate, ctrl.createBrands)
-    .post('/picture-laboratory', ctrl.setInfoUpload, uploadImageS3.single('file'), addLaboratoriesImageValidator, RouteValidator.validate, ctrl.addBrandsImage)
-    .patch('/', laboratoriesValidator, RouteValidator.validate, ctrl.updateBrands)
-    .delete('/', laboratoriesValidator, RouteValidator.validate, ctrl.deleteBrands);
+    .get('/', RouteValidator.validate, ctrl.fetchLaboratories)
+    .get('/id', laboratoriesValidator, RouteValidator.validate, ctrl.getLaboratoryById)
+    .post('/', RouteValidator.validate, ctrl.createLaboratory)
+    .post('/picture-laboratory', ctrl.setInfoUpload, uploadImageS3.single('file'), addLaboratoriesImageValidator, RouteValidator.validate, ctrl.addLaboratoryImage)
+    .patch('/', laboratoriesValidator, RouteValidator.validate, ctrl.updateLaboratory)
+    .delete('/', laboratoriesValidator, RouteValidator.validate, ctrl.deleteLaboratory);

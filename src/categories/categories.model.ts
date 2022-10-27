@@ -18,6 +18,11 @@ export interface ICategoriesBrands {
     brand_name: string;
 }
 
+export interface ICategoriesLaboratory {
+    laboratory_id: string;
+    laboratory_name: string;
+}
+
 export interface ICategoriesSubcategories {
     subcategory_id: string;
     subcategory_name: string;
@@ -29,6 +34,7 @@ export interface ISubcategories {
     subcategory_image: string;
     subcategory_type: string;
     subcategory_brands: Array<ICategoriesBrands>;
+    subcategory_laboratory: Array<ICategoriesLaboratory>;
     subcategory_category: Array<ISubcategoriesCategories>;
     created_at?: Date;
     updated_at?: Date;
@@ -64,25 +70,40 @@ const newsSchemaSubcategories = new Schema<ISubcategories>(
                 {
                     brand_id: {
                         type: String,
-                        required: true
+                        required: false
                     },
                     brand_name: {
                         type: String,
-                        required: true
+                        required: false
                     }
                 }
             ],
-            required: true
+            required: false
+        },
+        subcategory_laboratory: {
+            type: [
+                {
+                    laboratory_id: {
+                        type: String,
+                        required: false
+                    },
+                    laboratory_name: {
+                        type: String,
+                        required: false
+                    }
+                }
+            ],
+            required: false
         },
         subcategory_category: [
             {
                 category_id: {
                     type: String,
-                    required: true
+                    required: false
                 },
                 category_name: {
                     type: String,
-                    required: true
+                    required: false
                 },
             }
         ],
@@ -118,29 +139,14 @@ const newsSchemaCategories = new Schema<ICategories>(
             type: String,
             required: true
         },
-        category_brands: {
-            type: [
-                {
-                    brand_id: {
-                        type: String,
-                        required: true
-                    },
-                    brand_name: {
-                        type: String,
-                        required: true
-                    }
-                }
-            ],
-            required: true
-        },
         category_subcategory: {
             type: [
                 {
-                    category_id: {
+                    subcategory_id: {
                         type: String,
                         required: false
                     },
-                    category_name: {
+                    subcategory_name: {
                         type: String,
                         required: false
                     }

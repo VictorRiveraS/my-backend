@@ -10,6 +10,6 @@ BannersRoutes
     .get('/', RouteValidator.validate, ctrl.fetchBanners)
     .get('/id', bannerssValidator, RouteValidator.validate, ctrl.getBannerById)
     .post('/', RouteValidator.validate, ctrl.createBanner)
-    .post('/picture-banner', ctrl.setInfoUpload, uploadImageS3.single('file'), addBannerImageValidator, RouteValidator.validate, ctrl.addNewsImage)
+    .post('/picture-banner', ctrl.setInfoUpload, uploadImageS3.single('file'), addBannerImageValidator, RouteValidator.validate, ctrl.addBannerImage)
     .patch('/', bannerssValidator, RouteValidator.validate, ctrl.updateBanner)
     .delete('/', bannerssValidator, RouteValidator.validate, ctrl.deleteBanner);

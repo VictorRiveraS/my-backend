@@ -4,7 +4,7 @@ import service from './laboratories.service';
 import { UUIDv4 } from "uuid-v4-validator";
 
 class BrandsCtrl {
-    public async fetchBrands(req: Request, res: Response): Promise<any> {
+    public async fetchLaboratories(req: Request, res: Response): Promise<any> {
         try {
             const page: number = Number(req.query.page);
             const limit: any = Number(req.query.limit);
@@ -37,7 +37,7 @@ class BrandsCtrl {
         }
     }
 
-    public async getBrandsById(req: Request, res: Response): Promise<any> {
+    public async getLaboratoryById(req: Request, res: Response): Promise<any> {
         try {
             /*  const response = await service.forgotPassword(req.body.email);
              Handler(res, response[0], response[1]); */
@@ -46,10 +46,10 @@ class BrandsCtrl {
         }
     }
 
-    public async createBrands(req: Request, res: Response): Promise<any> {
+    public async createLaboratory(req: Request, res: Response): Promise<any> {
         try {
             const body = req.body;
-            body.category_id = new UUIDv4().id.substring(0, 8);
+            body.laboratory_id = new UUIDv4().id.substring(0, 8);
             const response = await service.createLaboratories(body);
             Handler(res, response[0], response[1]);
         } catch (error) {
@@ -57,38 +57,38 @@ class BrandsCtrl {
         }
     }
 
-    public async addBrandsImage(req: Request | any, res: Response): Promise<any> {
+    public async addLaboratoryImage(req: Request | any, res: Response): Promise<any> {
         try {
-            const category_id: any = req.query.category_id;
+            const laboratory_id: any = req.query.laboratory_id;
             const image: any = req.file;
-            const response = await service.addLaboratoriesImage(image, category_id);
+            const response = await service.addLaboratoriesImage(image, laboratory_id);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
         }
     }
 
-    public async updateBrands(req: Request, res: Response): Promise<any> {
+    public async updateLaboratory(req: Request, res: Response): Promise<any> {
         try {
             delete req.body.isDeleted;
             delete req.body.tenantId;
-            const category_id: any = req.query.category_id;
+            const laboratory_id: any = req.query.laboratory_id;
             const body: object = req.body;
-            const response = await service.updateLaboratories(category_id, body);
+            const response = await service.updateLaboratories(laboratory_id, body);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
         }
     }
 
-    public async deleteBrands(req: Request, res: Response): Promise<any> {
+    public async deleteLaboratory(req: Request, res: Response): Promise<any> {
         try {
-            const category_id: any = req.query.category_id;
+            const laboratory_id: any = req.query.laboratory_id;
             const body: object = req.body;
             let data: object = {
                 ...body,
             };
-            const response = await service.deleteLaboratory(data, category_id);
+            const response = await service.deleteLaboratory(data, laboratory_id);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
@@ -97,14 +97,14 @@ class BrandsCtrl {
 
     public async setInfoUpload(req: any, res: Response, next: NextFunction): Promise<any> {
         try {
-            const allowedTypes = ["principal_category", "secundary_category"];
-            const category_id: any = req.query.category_id;
+            const allowedTypes = ["principal_laboratory"];
+            const laboratory_id: any = req.query.laboratory_id;
             const type: string = req.query.type === undefined ? "" : String(req.query.type);
             if (type === "" || !allowedTypes.includes(type)) {
                 Handler(res, 500, { message: "The request is incomplete." + type });
                 return false;
             }
-            req.params.route_upload_s3 = 'Brands' + "/" + type + "/" + category_id + "/";
+            req.params.route_upload_s3 = 'Laboratories' + "/" + type + "/" + laboratory_id + "/";
             req.params.type_upload_s3 = type;
             next();
         } catch (error) {
