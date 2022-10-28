@@ -161,7 +161,8 @@ class CategoriesCtrl {
         try {
             const body = req.body;
             body.subcategory_id = new UUIDv4().id.substring(0, 8);
-            const response = await service.createSubcategories(body);
+            const category_id: any = body.category_root_id;
+            const response = await service.createSubcategories(body, category_id);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);

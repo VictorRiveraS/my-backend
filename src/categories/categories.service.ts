@@ -1,4 +1,4 @@
-import { categoriesModel, subcategoriesModel } from './categories.model';
+import { categoriesModel, ICategoriesSubcategories, subcategoriesModel } from './categories.model';
 
 class CategoriesService {
     public async createCategories(body: any): Promise<any> {
@@ -117,9 +117,14 @@ class CategoriesService {
         }
     }
 
-    public async createSubcategories(body: any): Promise<any> {
+    public async createSubcategories(body: any, category_id: string): Promise<any> {
         try {
             const create_subcategory: any = await subcategoriesModel.create(body);
+            const root_category: Array<ICategoriesSubcategories> = [{
+                subcategory_id: create_subcategory.subcategory_id,
+                subcategory_name: create_subcategory.subcategory_name
+            }]
+            await categoriesModel.findOneAndUpdate({ category_id: category_id }, { category_subcategory: root_category }, { upsert: true, new: true });
             return [201, { message: 'Subcategory added', create_subcategory }];
         } catch (error) {
             return [500, error];

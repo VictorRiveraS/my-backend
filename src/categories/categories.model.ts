@@ -5,14 +5,49 @@ export interface ICategories {
     category_name: string;
     category_image: string;
     category_type: string;
-    category_brands?: Array<ICategoriesBrands>;
+    category_brands: Array<ICategoriesBrands>;
     category_subcategory?: Array<ICategoriesSubcategories>;
+    category_subsubcategory?: Array<ICategoriesSubSubcategories>;
+    isAcive: boolean;
     created_at?: Date;
     updated_at?: Date;
     created_by?: string;
     updated_by?: string;
 }
 
+export interface ISubcategories {
+    subcategory_id: string | null | undefined;
+    subcategory_name: string;
+    subcategory_image: string;
+    subcategory_type: string;
+    subcategory_brands?: Array<ICategoriesBrands>;
+    subcategory_laboratory?: Array<ICategoriesLaboratory>;
+    category_root: string;
+    category_root_id: string;
+    isAcive: boolean;
+    created_at?: Date;
+    updated_at?: Date;
+    created_by?: string;
+    updated_by?: string;
+}
+
+export interface ISubSubcategories {
+    subsubcategory_id: string | null | undefined;
+    subsubcategory_name: string;
+    subsubcategory_image: string;
+    subsubcategory_type: string;
+    subsubcategory_brands?: Array<ICategoriesBrands>;
+    subsubcategory_laboratory?: Array<ICategoriesLaboratory>;
+    category_root: string;
+    category_root_id: string;
+    subcategory: string;
+    subcategory_id: string;
+    isAcive: boolean;
+    created_at?: Date;
+    updated_at?: Date;
+    created_by?: string;
+    updated_by?: string;
+}
 export interface ICategoriesBrands {
     brand_id: string;
     brand_name: string;
@@ -28,24 +63,81 @@ export interface ICategoriesSubcategories {
     subcategory_name: string;
 }
 
-export interface ISubcategories {
-    subcategory_id: string | null | undefined;
-    subcategory_name: string;
-    subcategory_image: string;
-    subcategory_type: string;
-    subcategory_brands: Array<ICategoriesBrands>;
-    subcategory_laboratory: Array<ICategoriesLaboratory>;
-    subcategory_category: Array<ISubcategoriesCategories>;
-    created_at?: Date;
-    updated_at?: Date;
-    created_by?: string;
-    updated_by?: string;
+export interface ICategoriesSubSubcategories {
+    subsubcategory_id: string;
+    subsubcategory_name: string;
 }
 
 export interface ISubcategoriesCategories {
     category_id: string;
     category_name: string;
 }
+
+const newsSchemaCategories = new Schema<ICategories>(
+    {
+        category_id: {
+            type: String,
+            required: false
+        },
+        category_name: {
+            type: String,
+            required: [true, 'Category name is required.']
+        },
+        category_image: {
+            type: String,
+            required: false
+        },
+        category_type: {
+            type: String,
+            required: true
+        },
+        category_brands: {
+            type: [
+                {
+                    brand_id: {
+                        type: String,
+                        required: false
+                    },
+                    brand_name: {
+                        type: String,
+                        required: false
+                    }
+                }
+            ],
+            required: true
+        },
+        category_subcategory: {
+            type: [
+                {
+                    subcategory_id: {
+                        type: String,
+                        required: false
+                    },
+                    subcategory_name: {
+                        type: String,
+                        required: false
+                    }
+                }
+            ],
+            required: false
+        },
+        isAcive: {
+            type: Boolean,
+            required: true
+        },
+        created_by: {
+            type: String,
+        },
+        updated_by: {
+            type: String,
+        }
+    }, {
+    timestamps: {
+        createdAt: 'created_At',
+        updatedAt: 'updated_At',
+    }
+}
+);
 
 const newsSchemaSubcategories = new Schema<ISubcategories>(
     {
@@ -95,18 +187,18 @@ const newsSchemaSubcategories = new Schema<ISubcategories>(
             ],
             required: false
         },
-        subcategory_category: [
-            {
-                category_id: {
-                    type: String,
-                    required: false
-                },
-                category_name: {
-                    type: String,
-                    required: false
-                },
-            }
-        ],
+        category_root: {
+            type: String,
+            required: true
+        },
+        category_root_id: {
+            type: String,
+            required: true
+        },
+        isAcive: {
+            type: Boolean,
+            required: true
+        },
         created_by: {
             type: String,
         },
@@ -121,38 +213,73 @@ const newsSchemaSubcategories = new Schema<ISubcategories>(
 }
 );
 
-const newsSchemaCategories = new Schema<ICategories>(
+const newsSchemaSubSubcategories = new Schema<ISubSubcategories>(
     {
-        category_id: {
+        subsubcategory_id: {
             type: String,
             required: false
         },
-        category_name: {
+        subsubcategory_name: {
             type: String,
-            required: [true, 'Category name is required.']
+            required: [true, 'Subcategory name is required.']
         },
-        category_image: {
+        subsubcategory_image: {
             type: String,
             required: false
         },
-        category_type: {
+        subsubcategory_type: {
             type: String,
             required: true
         },
-        category_subcategory: {
+        subsubcategory_brands: {
             type: [
                 {
-                    subcategory_id: {
+                    brand_id: {
                         type: String,
                         required: false
                     },
-                    subcategory_name: {
+                    brand_name: {
                         type: String,
                         required: false
                     }
                 }
             ],
             required: false
+        },
+        subsubcategory_laboratory: {
+            type: [
+                {
+                    laboratory_id: {
+                        type: String,
+                        required: false
+                    },
+                    laboratory_name: {
+                        type: String,
+                        required: false
+                    }
+                }
+            ],
+            required: false
+        },
+        category_root: {
+            type: String,
+            required: true
+        },
+        category_root_id: {
+            type: String,
+            required: true
+        },
+        subcategory: {
+            type: String,
+            required: true
+        },
+        subcategory_id: {
+            type: String,
+            required: true
+        },
+        isAcive: {
+            type: Boolean,
+            required: true
         },
         created_by: {
             type: String,
@@ -170,3 +297,4 @@ const newsSchemaCategories = new Schema<ICategories>(
 
 export const categoriesModel = model<ICategories>('categories', newsSchemaCategories);
 export const subcategoriesModel = model<ISubcategories>('subcategories', newsSchemaSubcategories);
+export const subsubcategoriesModel = model<ISubSubcategories>('subsubcategories', newsSchemaSubSubcategories);
