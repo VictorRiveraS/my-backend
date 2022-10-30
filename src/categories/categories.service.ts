@@ -1,4 +1,4 @@
-import { categoriesModel, ICategoriesSubcategories, subcategoriesModel } from './categories.model';
+import { categoriesModel, ICategoriesSubcategories, ICategoriesSubSubcategories, subcategoriesModel, subsubcategoriesModel } from './categories.model';
 
 class CategoriesService {
     public async createCategories(body: any): Promise<any> {
@@ -120,12 +120,43 @@ class CategoriesService {
     public async createSubcategories(body: any, category_id: string): Promise<any> {
         try {
             const create_subcategory: any = await subcategoriesModel.create(body);
+
             const root_category: Array<ICategoriesSubcategories> = [{
                 subcategory_id: create_subcategory.subcategory_id,
                 subcategory_name: create_subcategory.subcategory_name
             }]
             await categoriesModel.findOneAndUpdate({ category_id: category_id }, { category_subcategory: root_category }, { upsert: true, new: true });
             return [201, { message: 'Subcategory added', create_subcategory }];
+        } catch (error) {
+            return [500, error];
+        }
+    }
+
+    public async createSubsubcategories(body: any, category_id: string, subcategory_id: string): Promise<any> {
+        try {
+            const create_subsubcategory: any = await subsubcategoriesModel.create(body);
+            const category: any = await categoriesModel.find({ category_id: category_id });
+            const subcategory: any = category[0].category_subcategory.find((category: any) => category.subcategory_id == subcategory_id);
+            const checkName: any = subcategory.category_subsubcategory.find((subcategory: any) => subcategory.subsubcategory_name == body.subsubcategory_name);
+            if (!checkName) {
+                const sub_category: Array<ICategoriesSubSubcategories> = [{
+                    subsubcategory_id: create_subsubcategory.subsubcategory_id,
+                    subsubcategory_name: create_subsubcategory.subsubcategory_name
+                }]
+                const newSubsubcategory: any = [
+                    ...subcategory.category_subsubcategory,
+                    ...sub_category
+                ]
+                const root_category: Array<ICategoriesSubcategories> = [{
+                    subcategory_id: create_subsubcategory.subcategory_id,
+                    subcategory_name: create_subsubcategory.subcategory,
+                    category_subsubcategory: [...newSubsubcategory]
+                }]
+                await categoriesModel.findOneAndUpdate({ category_id: category_id }, { category_subcategory: root_category }, { upsert: true, new: true });
+                await subcategoriesModel.findOneAndUpdate({ subcategory_id: subcategory_id }, { category_subsubcategory: newSubsubcategory }, { upsert: true, new: true });
+                return [201, { message: 'Subcategory added', create_subcategory: create_subsubcategory }];
+            }
+            return [400, 'The category name has been registred'];
         } catch (error) {
             return [500, error];
         }

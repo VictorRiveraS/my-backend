@@ -7,7 +7,6 @@ export interface ICategories {
     category_type: string;
     category_brands: Array<ICategoriesBrands>;
     category_subcategory?: Array<ICategoriesSubcategories>;
-    category_subsubcategory?: Array<ICategoriesSubSubcategories>;
     isAcive: boolean;
     created_at?: Date;
     updated_at?: Date;
@@ -24,6 +23,7 @@ export interface ISubcategories {
     subcategory_laboratory?: Array<ICategoriesLaboratory>;
     category_root: string;
     category_root_id: string;
+    category_subsubcategory?: Array<ICategoriesSubSubcategories>;
     isAcive: boolean;
     created_at?: Date;
     updated_at?: Date;
@@ -61,6 +61,7 @@ export interface ICategoriesLaboratory {
 export interface ICategoriesSubcategories {
     subcategory_id: string;
     subcategory_name: string;
+    category_subsubcategory?: Array<ICategoriesSubSubcategories>;
 }
 
 export interface ICategoriesSubSubcategories {
@@ -116,7 +117,22 @@ const newsSchemaCategories = new Schema<ICategories>(
                     subcategory_name: {
                         type: String,
                         required: false
-                    }
+                    },
+                    category_subsubcategory: {
+                        type: [
+                            {
+                                subsubcategory_id: {
+                                    type: String,
+                                    required: false
+                                },
+                                subsubcategory_name: {
+                                    type: String,
+                                    required: false
+                                }
+                            }
+                        ],
+                        required: false
+                    },
                 }
             ],
             required: false
@@ -194,6 +210,21 @@ const newsSchemaSubcategories = new Schema<ISubcategories>(
         category_root_id: {
             type: String,
             required: true
+        },
+        category_subsubcategory: {
+            type: [
+                {
+                    subsubcategory_id: {
+                        type: String,
+                        required: false
+                    },
+                    subsubcategory_name: {
+                        type: String,
+                        required: false
+                    }
+                }
+            ],
+            required: false
         },
         isAcive: {
             type: Boolean,
