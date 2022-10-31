@@ -88,10 +88,7 @@ class CategoriesCtrl {
         try {
             const category_id: any = req.query.category_id;
             const body: object = req.body;
-            let data: object = {
-                ...body,
-            };
-            const response = await service.deleteCategories(data, category_id);
+            const response = await service.deleteCategories(category_id);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
@@ -100,7 +97,7 @@ class CategoriesCtrl {
 
     public async setInfoUpload(req: any, res: Response, next: NextFunction): Promise<any> {
         try {
-            const allowedTypes = ["principal_category", "secundary_category"];
+            const allowedTypes = ["principal_category", "secondary_category"];
             const category_id: any = req.query.category_id;
             const type: string = req.query.type === undefined ? "" : String(req.query.type);
             if (type === "" || !allowedTypes.includes(type)) {
@@ -209,7 +206,7 @@ class CategoriesCtrl {
 
     public async setInfoSubCatUpload(req: any, res: Response, next: NextFunction): Promise<any> {
         try {
-            const allowedTypes = ["principal_subcategory", "secundary_subcategory"];
+            const allowedTypes = ["principal_subcategory", "secondary_subcategory"];
             const subcategory_id: any = req.query.subcategory_id;
             const type: string = req.query.type === undefined ? "" : String(req.query.type);
             if (type === "" || !allowedTypes.includes(type)) {
@@ -243,8 +240,8 @@ class CategoriesCtrl {
                 body = {}
             }
             const skip: number = (page - 1) * limit;
-            const totalItems = await service.getSubcategoriesCount(body);
-            let response: any = await service.getSubcategoriesService(body, page, limit, skip);
+            const totalItems = await service.getSubsubcategoriesCount(body);
+            let response: any = await service.getSubsubcategoriesService(body, page, limit, skip);
             const data: object = {
                 totalItems: totalItems,
                 pageLength: limit,
@@ -269,8 +266,6 @@ class CategoriesCtrl {
 
     public async createSubsubcategories(req: Request, res: Response): Promise<any> {
         try {
-            console.log(1);
-
             const body = req.body;
             body.subsubcategory_id = new UUIDv4().id.substring(0, 8);
             const category_id: any = body.category_root_id;
@@ -308,21 +303,23 @@ class CategoriesCtrl {
 
     public async deleteSubsubcategories(req: Request, res: Response): Promise<any> {
         try {
+            const category_id: any = req.query.category_id;
             const subcategory_id: any = req.query.subcategory_id;
+            const subsubcategory_id: any = req.query.subsubcategory_id;
             const body: object = req.body;
             let data: object = {
                 ...body,
             };
-            const response = await service.deleteSubcategories(data, subcategory_id);
+            const response = await service.deleteSubsubcategories(category_id, subcategory_id, subsubcategory_id);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
         }
     }
 
-    public async setInfoSubsubCatUpload(req: any, res: Response, next: NextFunction): Promise<any> {
+    public async setInfoSubsubcategoryUpload(req: any, res: Response, next: NextFunction): Promise<any> {
         try {
-            const allowedTypes = ["principal_subcategory", "secundary_subcategory"];
+            const allowedTypes = ["principal_subcategory", "secondary_subcategory"];
             const subcategory_id: any = req.query.subcategory_id;
             const type: string = req.query.type === undefined ? "" : String(req.query.type);
             if (type === "" || !allowedTypes.includes(type)) {

@@ -7,7 +7,7 @@ export interface ICategories {
     category_type: string;
     category_brands: Array<ICategoriesBrands>;
     category_subcategory?: Array<ICategoriesSubcategories>;
-    isAcive: boolean;
+    isActive: boolean;
     created_at?: Date;
     updated_at?: Date;
     created_by?: string;
@@ -24,7 +24,7 @@ export interface ISubcategories {
     category_root: string;
     category_root_id: string;
     category_subsubcategory?: Array<ICategoriesSubSubcategories>;
-    isAcive: boolean;
+    isActive: boolean;
     created_at?: Date;
     updated_at?: Date;
     created_by?: string;
@@ -42,7 +42,7 @@ export interface ISubSubcategories {
     category_root_id: string;
     subcategory: string;
     subcategory_id: string;
-    isAcive: boolean;
+    isActive: boolean;
     created_at?: Date;
     updated_at?: Date;
     created_by?: string;
@@ -137,7 +137,7 @@ const newsSchemaCategories = new Schema<ICategories>(
             ],
             required: false
         },
-        isAcive: {
+        isActive: {
             type: Boolean,
             required: true
         },
@@ -226,7 +226,7 @@ const newsSchemaSubcategories = new Schema<ISubcategories>(
             ],
             required: false
         },
-        isAcive: {
+        isActive: {
             type: Boolean,
             required: true
         },
@@ -308,7 +308,7 @@ const newsSchemaSubSubcategories = new Schema<ISubSubcategories>(
             type: String,
             required: true
         },
-        isAcive: {
+        isActive: {
             type: Boolean,
             required: true
         },
