@@ -3,7 +3,7 @@ import ctrl from './users.ctrl';
 import RouteValidator from '../helpers/validators';
 import { changePasswordValidator } from './users.validator';
 
-export const adminUsersRouter = Router();
+export const AdminUsersRouter = Router();
 
-adminUsersRouter
+AdminUsersRouter
     .patch('/change-password', changePasswordValidator, RouteValidator.validate, ctrl.changePassword);

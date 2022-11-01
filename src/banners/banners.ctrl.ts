@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import Handler from '../helpers/request.handler';
 import service from './banners.service';
 import { UUIDv4 } from "uuid-v4-validator";
@@ -59,6 +59,17 @@ class BannersCtrl {
         }
     }
 
+    public async addBannerImage(req: Request | any, res: Response): Promise<any> {
+        try {
+            const banner_id: any = req.query.banner_id;
+            const image: any = req.file;
+            const response = await service.addBannersImage(image, banner_id);
+            Handler(res, response[0], response[1]);
+        } catch (error) {
+            Handler(res, 500, error);
+        }
+    }
+
     public async updateBanner(req: Request, res: Response): Promise<any> {
         try {
             delete req.body.isDeleted;
@@ -85,6 +96,25 @@ class BannersCtrl {
             Handler(res, 500, error);
         }
     }
+
+    public async setInfoUpload(req: any, res: Response, next: NextFunction): Promise<any> {
+        try {
+            const allowedTypes = ["principal_banner", "brand_banner"];
+            const banner_id: any = req.query.banner_id;
+            const type: string = req.query.type === undefined ? "" : String(req.query.type);
+            if (type === "" || !allowedTypes.includes(type)) {
+                Handler(res, 500, { message: "The request is incomplete." + type });
+                return false;
+            }
+            req.params.route_upload_s3 = 'Banners' + "/" + type + "/" + banner_id + "/";
+            req.params.type_upload_s3 = type;
+            next();
+        } catch (error) {
+            Handler(res, 500, error);
+        }
+    }
 }
+
+
 
 export default new BannersCtrl;

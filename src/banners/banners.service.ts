@@ -1,11 +1,8 @@
 import { BannersModel } from './banners.model';
 
 class BannersService {
-
-
     public async createBanner(body: any): Promise<any> {
         try {
-            console.log(body.banner_id);
             const create_banner: any = await BannersModel.create(body);
             return [201, { message: 'banner added', create_banner }];
         } catch (error) {
@@ -90,6 +87,27 @@ class BannersService {
             }
             return [200, {
                 listSegment
+            }];
+        } catch (error) {
+            return [500, error];
+        }
+    }
+
+    public async addBannersImage(file: any, banner_id: string): Promise<any> {
+        try {
+            const existNews: any = await BannersModel.findOne({ banner_id: banner_id });
+            if (!existNews) {
+                return [404, { message: "The banner not found." }]
+            }
+            if (file === undefined) {
+                return [500, {
+                    message: "Archivo subido sin exito"
+                }]
+            }
+            let response = file.location + "?t=" + Date.now();;
+            const picture = await BannersModel.findOneAndUpdate({ banner_id: banner_id }, { banner_image: response }, { upsert: true, new: true });
+            return [201, {
+                message: "Banner image updated.", picture
             }];
         } catch (error) {
             return [500, error];

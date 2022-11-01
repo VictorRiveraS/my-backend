@@ -3,7 +3,7 @@ import { hash } from 'bcryptjs';
 import adminAuthService from '../auth/auth.service';
 
 class AdminUsersService {
-    public async changePassword(new_password: string, email: string): Promise<any> {
+    public async changePassword(new_password: string, email: string): Promise<any[]> {
         try {
             const user: IAdminUser = await adminAuthService.existUser(email);
             if (!user) {
