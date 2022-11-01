@@ -23,24 +23,50 @@ class CategoriesCtrl {
             }
             const skip: number = (page - 1) * limit;
             const totalItems = await service.getCategoriesCount(body);
-            let response: any = await service.getCategoriesService(body, page, limit, skip);
+            let response: any = await service.fetchCategoriesService(body, page, limit, skip);
             const data: object = {
                 totalItems: totalItems,
                 pageLength: limit,
                 numberPages: Math.ceil(totalItems / limit),
-                thisPage: response[1].listSegment.length,
-                items: response[1].listSegment
+                thisPage: response[1].categories.length,
+                items: response[1].categories
             }
             Handler(res, response[0], data);
         } catch (error) {
+            console.log(error);
+
             Handler(res, 500, error);
         }
     }
 
     public async getCategoriesById(req: Request, res: Response): Promise<any> {
         try {
-            /*  const response = await service.forgotPassword(req.body.email);
-             Handler(res, response[0], response[1]); */
+            const category_id = req.params.id;
+            const response = await service.getCategoryService(category_id);
+            Handler(res, response[0], response[1]);
+        } catch (error) {
+            console.log(error);
+
+            Handler(res, 500, error);
+        }
+    }
+
+    public async getSubcategoriesById(req: Request, res: Response): Promise<any> {
+        try {
+            const subcategory_id = req.params.id;
+            const response = await service.getSubcategoryService(subcategory_id);
+            Handler(res, response[0], response[1]);
+        } catch (error) {
+            Handler(res, 500, error);
+        }
+    }
+
+
+    public async getSubsubcategoriesById(req: Request, res: Response): Promise<any> {
+        try {
+            const subsubcategory_id = req.params.id;
+            const response = await service.getSubsubcategoryService(subsubcategory_id);
+            Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
         }
@@ -73,11 +99,33 @@ class CategoriesCtrl {
 
     public async updateCategories(req: Request, res: Response): Promise<any> {
         try {
-            delete req.body.isDeleted;
-            delete req.body.tenantId;
             const category_id: any = req.query.category_id;
             const body: object = req.body;
             const response = await service.updateCategory(category_id, body);
+            Handler(res, response[0], response[1]);
+        } catch (error) {
+            Handler(res, 500, error);
+        }
+    }
+
+
+    public async updateSubcategories(req: Request, res: Response): Promise<any> {
+        try {
+            const subcategory_id: any = req.query.subcategory_id;
+            const body: object = req.body;
+            const response = await service.updateSubcategory(subcategory_id, body);
+            Handler(res, response[0], response[1]);
+        } catch (error) {
+            Handler(res, 500, error);
+        }
+    }
+
+
+    public async updateSubsubcategories(req: Request, res: Response): Promise<any> {
+        try {
+            const subsubcategory_id: any = req.query.subsubcategory_id;
+            const body: object = req.body;
+            const response = await service.updateSubsubcategory(subsubcategory_id, body);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
@@ -131,13 +179,13 @@ class CategoriesCtrl {
             }
             const skip: number = (page - 1) * limit;
             const totalItems = await service.getSubcategoriesCount(body);
-            let response: any = await service.getSubcategoriesService(body, page, limit, skip);
+            let response: any = await service.fetchSubcategoriesService(body, page, limit, skip);
             const data: object = {
                 totalItems: totalItems,
                 pageLength: limit,
                 numberPages: Math.ceil(totalItems / limit),
-                thisPage: response[1].listSegment.length,
-                items: response[1].listSegment
+                thisPage: response[1].subcategories.length,
+                items: response[1].subcategories
             }
             Handler(res, response[0], data);
         } catch (error) {
@@ -145,14 +193,7 @@ class CategoriesCtrl {
         }
     }
 
-    public async getSubcategoriesById(req: Request, res: Response): Promise<any> {
-        try {
-            /*  const response = await service.forgotPassword(req.body.email);
-             Handler(res, response[0], response[1]); */
-        } catch (error) {
-            Handler(res, 500, error);
-        }
-    }
+
 
     public async createSubcategories(req: Request, res: Response): Promise<any> {
         try {
@@ -177,27 +218,11 @@ class CategoriesCtrl {
         }
     }
 
-    public async updateSubcategories(req: Request, res: Response): Promise<any> {
-        try {
-            delete req.body.isDeleted;
-            delete req.body.tenantId;
-            const subcategory_id: any = req.query.subcategory_id;
-            const body: object = req.body;
-            const response = await service.updateSubcategory(subcategory_id, body);
-            Handler(res, response[0], response[1]);
-        } catch (error) {
-            Handler(res, 500, error);
-        }
-    }
-
     public async deleteSubcategories(req: Request, res: Response): Promise<any> {
         try {
+            const category_id: any = req.query.category_id;
             const subcategory_id: any = req.query.subcategory_id;
-            const body: object = req.body;
-            let data: object = {
-                ...body,
-            };
-            const response = await service.deleteSubcategories(data, subcategory_id);
+            const response = await service.deleteSubcategories(category_id, subcategory_id);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);
@@ -224,6 +249,8 @@ class CategoriesCtrl {
 
     public async fetchSubsubcategories(req: Request, res: Response): Promise<any> {
         try {
+            console.log(12);
+
             const page: number = Number(req.query.page);
             const limit: any = Number(req.query.limit);
             let body: object;
@@ -241,13 +268,15 @@ class CategoriesCtrl {
             }
             const skip: number = (page - 1) * limit;
             const totalItems = await service.getSubsubcategoriesCount(body);
-            let response: any = await service.getSubsubcategoriesService(body, page, limit, skip);
+            console.log(1);
+
+            let response: any = await service.fetchSubsubcategoriesService(body, page, limit, skip);
             const data: object = {
                 totalItems: totalItems,
                 pageLength: limit,
                 numberPages: Math.ceil(totalItems / limit),
-                thisPage: response[1].listSegment.length,
-                items: response[1].listSegment
+                thisPage: response[1].subsubcategories.length,
+                items: response[1].subsubcategories
             }
             Handler(res, response[0], data);
         } catch (error) {
@@ -255,14 +284,6 @@ class CategoriesCtrl {
         }
     }
 
-    public async getSubsubcategoriesById(req: Request, res: Response): Promise<any> {
-        try {
-            /*  const response = await service.forgotPassword(req.body.email);
-             Handler(res, response[0], response[1]); */
-        } catch (error) {
-            Handler(res, 500, error);
-        }
-    }
 
     public async createSubsubcategories(req: Request, res: Response): Promise<any> {
         try {
@@ -282,19 +303,6 @@ class CategoriesCtrl {
             const subcategory_id: any = req.query.subcategory_id;
             const image: any = req.file;
             const response = await service.addSubcategoriesImage(image, subcategory_id);
-            Handler(res, response[0], response[1]);
-        } catch (error) {
-            Handler(res, 500, error);
-        }
-    }
-
-    public async updateSubsubcategories(req: Request, res: Response): Promise<any> {
-        try {
-            delete req.body.isDeleted;
-            delete req.body.tenantId;
-            const subcategory_id: any = req.query.subcategory_id;
-            const body: object = req.body;
-            const response = await service.updateSubcategory(subcategory_id, body);
             Handler(res, response[0], response[1]);
         } catch (error) {
             Handler(res, 500, error);

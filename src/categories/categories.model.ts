@@ -7,6 +7,7 @@ export interface ICategories {
     category_type: string;
     category_brands: Array<ICategoriesBrands>;
     category_subcategory?: Array<ICategoriesSubcategories>;
+    subcategories?: any,
     isActive: boolean;
     created_at?: Date;
     updated_at?: Date;
@@ -21,9 +22,10 @@ export interface ISubcategories {
     subcategory_type: string;
     subcategory_brands?: Array<ICategoriesBrands>;
     subcategory_laboratory?: Array<ICategoriesLaboratory>;
-    category_root: string;
+    category_root?: string;
     category_root_id: string;
     category_subsubcategory?: Array<ICategoriesSubSubcategories>;
+    subsubcategories?: any;
     isActive: boolean;
     created_at?: Date;
     updated_at?: Date;
@@ -137,6 +139,11 @@ const newsSchemaCategories = new Schema<ICategories>(
             ],
             required: false
         },
+        subcategories: [
+            {
+                type: Schema.Types.ObjectId, ref: 'subcategories'
+            }
+        ],
         isActive: {
             type: Boolean,
             required: true
@@ -204,8 +211,7 @@ const newsSchemaSubcategories = new Schema<ISubcategories>(
             required: false
         },
         category_root: {
-            type: String,
-            required: true
+            type: Schema.Types.String, ref: 'subcategories'
         },
         category_root_id: {
             type: String,
@@ -226,6 +232,7 @@ const newsSchemaSubcategories = new Schema<ISubcategories>(
             ],
             required: false
         },
+        subsubcategories: [{ type: Schema.Types.ObjectId, ref: 'subsubcategories' }],
         isActive: {
             type: Boolean,
             required: true
@@ -293,16 +300,14 @@ const newsSchemaSubSubcategories = new Schema<ISubSubcategories>(
             required: false
         },
         category_root: {
-            type: String,
-            required: true
+            type: Schema.Types.String, ref: 'subcategories'
         },
         category_root_id: {
             type: String,
             required: true
         },
         subcategory: {
-            type: String,
-            required: true
+            type: Schema.Types.String, ref: 'subcategories'
         },
         subcategory_id: {
             type: String,
