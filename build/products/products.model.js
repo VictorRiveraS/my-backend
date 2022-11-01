@@ -11,6 +11,25 @@ const newsSchema = new mongoose_1.Schema({
         type: String,
         required: [true, 'Product name is required.']
     },
+    product_technical_info: {
+        type: [
+            {
+                code: {
+                    type: String,
+                    required: false
+                },
+                label: {
+                    type: String,
+                    required: false
+                },
+                value: {
+                    type: String,
+                    required: false
+                }
+            }
+        ],
+        required: false
+    },
     product_lab: {
         type: String,
         required: [true, 'Product labratory is required.']
@@ -26,6 +45,14 @@ const newsSchema = new mongoose_1.Schema({
     product_category_id: {
         type: String,
         required: [true, 'Product category id is required.']
+    },
+    product_subcategory: {
+        type: String,
+        required: [true, 'Product subcategory is required.']
+    },
+    product_subcategory_id: {
+        type: String,
+        required: [true, 'Product subcategory id is required.']
     },
     product_brand: {
         type: String,
@@ -43,9 +70,25 @@ const newsSchema = new mongoose_1.Schema({
         type: Number,
         required: [true, 'Product price is required.']
     },
+    product_short_description: {
+        type: String,
+        required: [true, 'Product short description is required.']
+    },
+    product_long_description: {
+        type: String,
+        required: [true, 'Product long description is required.']
+    },
     product_sku: {
         type: String,
         required: [true, 'Product sku is required.']
+    },
+    product_stock: {
+        type: Number,
+        required: [true, 'Product stock is required.']
+    },
+    product_stock_status: {
+        type: String,
+        required: false
     },
     created_by: {
         type: String,

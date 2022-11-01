@@ -89,5 +89,33 @@ class ProductsCtrl {
             (0, request_handler_1.default)(res, 500, error);
         }
     }
+    async addProductImage(req, res) {
+        try {
+            const product_id = req.query.product_id;
+            const image = req.file;
+            const response = await products_service_1.default.addProductImage(image, product_id);
+            (0, request_handler_1.default)(res, response[0], response[1]);
+        }
+        catch (error) {
+            (0, request_handler_1.default)(res, 500, error);
+        }
+    }
+    async setInfoUpload(req, res, next) {
+        try {
+            const allowedTypes = ["principal_product"];
+            const product_id = req.query.product_id;
+            const type = req.query.type === undefined ? "" : String(req.query.type);
+            if (type === "" || !allowedTypes.includes(type)) {
+                (0, request_handler_1.default)(res, 500, { message: "The request is incomplete." + type });
+                return false;
+            }
+            req.params.route_upload_s3 = 'Products' + "/" + type + "/" + product_id + "/";
+            req.params.type_upload_s3 = type;
+            next();
+        }
+        catch (error) {
+            (0, request_handler_1.default)(res, 500, error);
+        }
+    }
 }
 exports.default = new ProductsCtrl;

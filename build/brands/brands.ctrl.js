@@ -53,7 +53,7 @@ class BrandsCtrl {
     async createBrands(req, res) {
         try {
             const body = req.body;
-            body.category_id = new uuid_v4_validator_1.UUIDv4().id.substring(0, 8);
+            body.brand_id = new uuid_v4_validator_1.UUIDv4().id.substring(0, 8);
             const response = await brands_service_1.default.createBrands(body);
             (0, request_handler_1.default)(res, response[0], response[1]);
         }
@@ -63,9 +63,9 @@ class BrandsCtrl {
     }
     async addBrandsImage(req, res) {
         try {
-            const category_id = req.query.category_id;
+            const brand_id = req.query.brand_id;
             const image = req.file;
-            const response = await brands_service_1.default.addBrandsImage(image, category_id);
+            const response = await brands_service_1.default.addBrandsImage(image, brand_id);
             (0, request_handler_1.default)(res, response[0], response[1]);
         }
         catch (error) {
@@ -76,9 +76,9 @@ class BrandsCtrl {
         try {
             delete req.body.isDeleted;
             delete req.body.tenantId;
-            const category_id = req.query.category_id;
+            const brand_id = req.query.brand_id;
             const body = req.body;
-            const response = await brands_service_1.default.updateBrands(category_id, body);
+            const response = await brands_service_1.default.updateBrands(brand_id, body);
             (0, request_handler_1.default)(res, response[0], response[1]);
         }
         catch (error) {
@@ -87,12 +87,12 @@ class BrandsCtrl {
     }
     async deleteBrands(req, res) {
         try {
-            const category_id = req.query.category_id;
+            const brand_id = req.query.brand_id;
             const body = req.body;
             let data = {
                 ...body,
             };
-            const response = await brands_service_1.default.deleteBrands(data, category_id);
+            const response = await brands_service_1.default.deleteBrands(data, brand_id);
             (0, request_handler_1.default)(res, response[0], response[1]);
         }
         catch (error) {
@@ -101,14 +101,14 @@ class BrandsCtrl {
     }
     async setInfoUpload(req, res, next) {
         try {
-            const allowedTypes = ["principal_category", "secundary_category"];
-            const category_id = req.query.category_id;
+            const allowedTypes = ["brand"];
+            const brand_id = req.query.brand_id;
             const type = req.query.type === undefined ? "" : String(req.query.type);
             if (type === "" || !allowedTypes.includes(type)) {
                 (0, request_handler_1.default)(res, 500, { message: "The request is incomplete." + type });
                 return false;
             }
-            req.params.route_upload_s3 = 'Brands' + "/" + type + "/" + category_id + "/";
+            req.params.route_upload_s3 = 'Brands' + "/" + type + "/" + brand_id + "/";
             req.params.type_upload_s3 = type;
             next();
         }
