@@ -63,11 +63,11 @@ const newsSchema = new Schema<IProducts>({
     },
     product_lab: {
         type: String,
-        required: [true, 'Product labratory is required.']
+        required: [true, 'Product laboratory is required.']
     },
     product_lab_id: {
         type: String,
-        required: [true, 'Product labratory id is required.']
+        required: [true, 'Product laboratory id is required.']
     },
     product_category: {
         type: String,

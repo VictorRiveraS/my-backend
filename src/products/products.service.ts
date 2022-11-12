@@ -67,8 +67,8 @@ class productsService {
 
     public async getProductsCount(body: object): Promise<number> {
         try {
-            let segmentCount: number = await ProductsModel.find(body).count();
-            return segmentCount
+            let productCount: number = await ProductsModel.find(body).count();
+            return productCount
         } catch (error) {
             throw error;
         }
@@ -100,7 +100,44 @@ class productsService {
             const products = await ProductsModel.find({ product_id: product_id });
             if (!products) {
                 return [400, {
-                    message: 'Product dont exists.'
+                    message: "Product don't exists."
+                }];
+            }
+            return [200, {
+                products
+            }];
+        } catch (error) {
+            return [500, error];
+        }
+    }
+
+    public async getProductsByCategoryCount(body: object): Promise<Array<any>> {
+        try {
+            const productsLength = await ProductsModel.find(body).count();
+            if (!productsLength) {
+                return [400, {
+                    message: "Product don't exists."
+                }];
+            }
+            return [200, {
+                products: productsLength
+            }];
+        } catch (error) {
+            return [500, error];
+        }
+    }
+
+    public async getProductByCategoryService(category_id: string, page: number, subcategory: string, min: string, max: string, sort: any, limit: number, skip: number): Promise<Array<any>> {
+        try {
+            let products;
+            if (page == 0) {
+                products = await ProductsModel.find({ product_category_id: category_id }).sort(sort);
+            } else {
+                products = await ProductsModel.find({ product_category_id: category_id }).setOptions({ skip: skip, limit: limit }).sort(sort);
+            }
+            if (!products) {
+                return [400, {
+                    message: 'There are no categories.'
                 }];
             }
             return [200, {

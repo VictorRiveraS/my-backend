@@ -48,6 +48,60 @@ class ProductsCtrl {
         }
     }
 
+    public async getProductsByCategory(req: Request, res: Response): Promise<any> {
+        try {
+            const onSort = (value: any) => {
+                const values: object = {
+                    'A - Z': { 'product_name': 'asc' },
+                    'Z - A': { 'product_name': 'desc' },
+                    'Precio mayor a menor': { 'product_price': 'desc' },
+                    'Precio menor a mayor': { 'product_price': 'asc' },
+                }
+                return values[value]
+            }
+            const category_id = req.params.category_id;
+            const page: number = Number(req.query.page);
+            const limit: any = Number(req.query.limit);
+            const brands: string = '';
+            const subcategory: string = '';
+            const min: string = '';
+            const max: string = '';
+            let sort: object = { 'created_At': 'asc' };
+            let body: object;
+            if (req.query.search) {
+                const search: string = String(req.query.search);
+                const regex = new RegExp(search, 'i');
+                body = {
+                    "$or": [
+                        { 'product_id': { '$regex': regex } },
+                        { 'product_name': { '$regex': regex } },
+                    ],
+                };
+            } else {
+                body = {}
+            }
+            if (req.query.sort !== '') {
+                sort = onSort(req.query.sort);
+            }
+            const skip: number = (page - 1) * limit;
+            let response: any = await service.getProductByCategoryService(category_id, page, subcategory, min, max, sort, limit, skip);
+            const totalItems = await service.getProductsByCategoryCount(body);
+            console.log(totalItems);
+            const data: object = {
+                totalItems: totalItems,
+                pageLength: limit,
+                numberPages: Math.ceil(Number(totalItems) / limit),
+                thisPage: response[1].products.length,
+                items: response[1].products
+            }
+            Handler(res, response[0], data)
+        } catch (error) {
+            console.log(error);
+
+            Handler(res, 500, error);
+        }
+    }
+
     public async createProducts(req: Request, res: Response): Promise<any> {
         try {
             const body = req.body;
@@ -86,7 +140,6 @@ class ProductsCtrl {
         }
     }
 
-
     public async addProductImage(req: Request | any, res: Response): Promise<any> {
         try {
             const product_id: any = req.query.product_id;
@@ -114,6 +167,8 @@ class ProductsCtrl {
             Handler(res, 500, error);
         }
     }
+
+
 }
 
 export default new ProductsCtrl;
