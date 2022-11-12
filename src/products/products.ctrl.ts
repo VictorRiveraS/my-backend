@@ -64,8 +64,8 @@ class ProductsCtrl {
             const limit: any = Number(req.query.limit);
             const brands: string = '';
             const subcategory: string = '';
-            const min: string = '';
-            const max: string = '';
+            let min: number = 0;
+            let max: number = 1000000;
             let sort: object = { 'created_At': 'asc' };
             let body: object;
             if (req.query.search) {
@@ -82,6 +82,12 @@ class ProductsCtrl {
             }
             if (req.query.sort !== '') {
                 sort = onSort(req.query.sort);
+            }
+            if (req.query.min !== '') {
+                min = Number(req.query.min);
+            }
+            if (req.query.max !== '') {
+                max = Number(req.query.max);
             }
             const skip: number = (page - 1) * limit;
             let response: any = await service.getProductByCategoryService(category_id, page, subcategory, min, max, sort, limit, skip);

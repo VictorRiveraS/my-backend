@@ -127,13 +127,26 @@ class productsService {
         }
     }
 
-    public async getProductByCategoryService(category_id: string, page: number, subcategory: string, min: string, max: string, sort: any, limit: number, skip: number): Promise<Array<any>> {
+    public async getProductByCategoryService(category_id: string, page: number, subcategory: string, min: number, max: number, sort: any, limit: number, skip: number): Promise<Array<any>> {
         try {
+            console.log(min);
+            console.log(max);
+
             let products;
             if (page == 0) {
-                products = await ProductsModel.find({ product_category_id: category_id }).sort(sort);
+                products = await ProductsModel.find(
+                    {
+                        product_category_id: category_id,
+                        product_price: { $lte: max, $gte: min },
+                    }
+                ).sort(sort);
             } else {
-                products = await ProductsModel.find({ product_category_id: category_id }).setOptions({ skip: skip, limit: limit }).sort(sort);
+                products = await ProductsModel.find(
+                    {
+                        product_category_id: category_id,
+                        product_price: { $lte: max, $gte: min },
+                    }
+                ).setOptions({ skip: skip, limit: limit }).sort(sort);
             }
             if (!products) {
                 return [400, {
