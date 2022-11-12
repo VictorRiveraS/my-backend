@@ -51,6 +51,62 @@ class ProductsCtrl {
             (0, request_handler_1.default)(res, 500, error);
         }
     }
+    async getProductsByCategory(req, res) {
+        try {
+            const onSort = (value) => {
+                const values = {
+                    'A - Z': { 'product_name': 'asc' },
+                    'Z - A': { 'product_name': 'desc' },
+                    'Precio mayor a menor': { 'product_price': 'desc' },
+                    'Precio menor a mayor': { 'product_price': 'asc' },
+                };
+                return values[value];
+            };
+            const category_id = req.params.category_id;
+            let search = '';
+            const page = Number(req.query.page);
+            const limit = Number(req.query.limit);
+            let brands = '';
+            let subcategory = '';
+            let min = 0;
+            let max = 1000000;
+            let sort = { 'created_At': 'asc' };
+            if (req.query.search !== '') {
+                const querySearch = String(req.query.search);
+                const regex = new RegExp(querySearch, 'i');
+                search =
+                    [
+                        { 'product_id': { '$regex': regex } },
+                        { 'product_name': { '$regex': regex } },
+                    ];
+            }
+            if (req.query.sort !== '')
+                sort = onSort(req.query.sort);
+            if (req.query.min !== '')
+                min = Number(req.query.min);
+            if (req.query.max !== '')
+                max = Number(req.query.max);
+            if (req.query.subcategory !== '')
+                subcategory = req.query.subcategory.toString();
+            if (req.query.brands !== '')
+                brands = req.query.brands.toString();
+            const skip = (page - 1) * limit;
+            let response = await products_service_1.default.getProductByCategoryService(category_id, page, search, brands, subcategory, min, max, sort, limit, skip);
+            const totalItems = response[2];
+            const data = {
+                totalItems: totalItems,
+                pageLength: limit,
+                numberPages: Math.ceil(Number(totalItems) / limit),
+                thisPage: response[1].products.length,
+                items: response[1].products
+            };
+            (0, request_handler_1.default)(res, response[0], data);
+        }
+        catch (error) {
+            console.log(error);
+            (0, request_handler_1.default)(res, 500, error);
+        }
+    }
     async createProducts(req, res) {
         try {
             const body = req.body;

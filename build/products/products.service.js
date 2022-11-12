@@ -67,8 +67,8 @@ class productsService {
     }
     async getProductsCount(body) {
         try {
-            let segmentCount = await products_model_1.ProductsModel.find(body).count();
-            return segmentCount;
+            let productCount = await products_model_1.ProductsModel.find(body).count();
+            return productCount;
         }
         catch (error) {
             throw error;
@@ -101,12 +101,62 @@ class productsService {
             const products = await products_model_1.ProductsModel.find({ product_id: product_id });
             if (!products) {
                 return [400, {
-                        message: 'Product dont exists.'
+                        message: "Product don't exists."
                     }];
             }
             return [200, {
                     products
                 }];
+        }
+        catch (error) {
+            return [500, error];
+        }
+    }
+    async getProductsByCategoryCount(body) {
+        try {
+            const productsLength = await products_model_1.ProductsModel.find(body).count();
+            if (!productsLength) {
+                return [400, {
+                        message: "Product don't exists."
+                    }];
+            }
+            return [200, {
+                    products: productsLength
+                }];
+        }
+        catch (error) {
+            return [500, error];
+        }
+    }
+    async getProductByCategoryService(category_id, page, search, brand, subcategory, min, max, sort, limit, skip) {
+        try {
+            let products;
+            let filters = {
+                product_category_id: category_id,
+                product_price: { $lte: max, $gte: min },
+            };
+            if (typeof search !== 'string')
+                filters['$or'] = search;
+            if (subcategory !== '')
+                filters['product_subcategory_id'] = { $eq: subcategory };
+            if (brand !== '')
+                filters['product_brand_id'] = { $eq: brand };
+            console.log(filters);
+            if (page == 0)
+                products = await products_model_1.ProductsModel.find(filters).sort(sort);
+            else
+                products = await products_model_1.ProductsModel.find(filters).setOptions({ skip: skip, limit: limit }).sort(sort);
+            const totalItems = await products_model_1.ProductsModel.find(filters).count();
+            if (!products) {
+                return [400, {
+                        message: 'There are no categories.'
+                    }];
+            }
+            return [200, {
+                    products
+                },
+                totalItems
+            ];
         }
         catch (error) {
             return [500, error];
