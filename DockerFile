@@ -11,7 +11,6 @@ RUN apk upgrade --update \
     && cp /usr/share/zoneinfo/${TZ} /etc/localtime \
     && rm -rf \
     /var/cache/apk/*
-RUN npm install
 EXPOSE 3000
 RUN mkdir /logs
 RUN chmod 777 -R /logs
