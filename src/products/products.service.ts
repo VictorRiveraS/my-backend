@@ -127,27 +127,20 @@ class productsService {
         }
     }
 
-    public async getProductByCategoryService(category_id: string, page: number, subcategory: string, min: number, max: number, sort: any, limit: number, skip: number): Promise<Array<any>> {
+    public async getProductByCategoryService(category_id: string, page: number, search: any, brand: string, subcategory: string, min: number, max: number, sort: any, limit: number, skip: number): Promise<Array<any>> {
         try {
-            console.log(min);
-            console.log(max);
-
             let products;
-            if (page == 0) {
-                products = await ProductsModel.find(
-                    {
-                        product_category_id: category_id,
-                        product_price: { $lte: max, $gte: min },
-                    }
-                ).sort(sort);
-            } else {
-                products = await ProductsModel.find(
-                    {
-                        product_category_id: category_id,
-                        product_price: { $lte: max, $gte: min },
-                    }
-                ).setOptions({ skip: skip, limit: limit }).sort(sort);
+            let filters: any = {
+                product_category_id: category_id,
+                product_price: { $lte: max, $gte: min },
             }
+            if (typeof search !== 'string') filters['$or'] = search
+            if (subcategory !== '') filters['product_subcategory_id'] = { $eq: subcategory }
+            if (brand !== '') filters['product_brand_id'] = { $eq: brand }
+            console.log(filters);
+            if (page == 0) products = await ProductsModel.find(filters).sort(sort);
+            else products = await ProductsModel.find(filters).setOptions({ skip: skip, limit: limit }).sort(sort);
+            const totalItems = await ProductsModel.find(filters).count();
             if (!products) {
                 return [400, {
                     message: 'There are no categories.'
@@ -155,7 +148,9 @@ class productsService {
             }
             return [200, {
                 products
-            }];
+            },
+                totalItems
+            ];
         } catch (error) {
             return [500, error];
         }

@@ -60,39 +60,31 @@ class ProductsCtrl {
                 return values[value]
             }
             const category_id = req.params.category_id;
+            let search: object | string = '';
             const page: number = Number(req.query.page);
-            const limit: any = Number(req.query.limit);
-            const brands: string = '';
-            const subcategory: string = '';
+            const limit: number = Number(req.query.limit);
+            let brands: string = '';
+            let subcategory: string = '';
             let min: number = 0;
             let max: number = 1000000;
             let sort: object = { 'created_At': 'asc' };
-            let body: object;
-            if (req.query.search) {
-                const search: string = String(req.query.search);
-                const regex = new RegExp(search, 'i');
-                body = {
-                    "$or": [
+            if (req.query.search !== '') {
+                const querySearch: string = String(req.query.search);
+                const regex = new RegExp(querySearch, 'i');
+                search =
+                    [
                         { 'product_id': { '$regex': regex } },
                         { 'product_name': { '$regex': regex } },
-                    ],
-                };
-            } else {
-                body = {}
+                    ]
             }
-            if (req.query.sort !== '') {
-                sort = onSort(req.query.sort);
-            }
-            if (req.query.min !== '') {
-                min = Number(req.query.min);
-            }
-            if (req.query.max !== '') {
-                max = Number(req.query.max);
-            }
+            if (req.query.sort !== '') sort = onSort(req.query.sort);
+            if (req.query.min !== '') min = Number(req.query.min);
+            if (req.query.max !== '') max = Number(req.query.max);
+            if (req.query.subcategory !== '') subcategory = req.query.subcategory.toString();
+            if (req.query.brands !== '') brands = req.query.brands.toString();
             const skip: number = (page - 1) * limit;
-            let response: any = await service.getProductByCategoryService(category_id, page, subcategory, min, max, sort, limit, skip);
-            const totalItems = await service.getProductsByCategoryCount(body);
-            console.log(totalItems);
+            let response: any = await service.getProductByCategoryService(category_id, page, search, brands, subcategory, min, max, sort, limit, skip);
+            const totalItems = response[2];
             const data: object = {
                 totalItems: totalItems,
                 pageLength: limit,
