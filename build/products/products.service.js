@@ -34,12 +34,12 @@ class productsService {
             const edit_product = await products_model_1.ProductsModel.findOneAndUpdate({ product_id: product_id }, body).setOptions({ new: true });
             if (!edit_product) {
                 return [401, {
-                        message: 'Product not update'
-                    }];
+                    message: 'Product not update'
+                }];
             }
             return [200, {
-                    edit_product
-                }];
+                edit_product
+            }];
         }
         catch (error) {
             return [500, error];
@@ -54,12 +54,12 @@ class productsService {
             const delete_product_remove = await products_model_1.ProductsModel.findOneAndDelete({ product_id: product_id }, body);
             if (!delete_product_remove) {
                 return [400, {
-                        message: 'Product not delete'
-                    }];
+                    message: 'Product not delete'
+                }];
             }
             return [200, {
-                    message: 'Product deleted', delete_product_remove
-                }];
+                message: 'Product deleted', delete_product_remove
+            }];
         }
         catch (error) {
             return [500, error];
@@ -85,12 +85,12 @@ class productsService {
             }
             if (!listSegment) {
                 return [400, {
-                        message: 'There are no products.'
-                    }];
+                    message: 'There are no products.'
+                }];
             }
             return [200, {
-                    listSegment
-                }];
+                listSegment
+            }];
         }
         catch (error) {
             return [500, error];
@@ -101,12 +101,12 @@ class productsService {
             const products = await products_model_1.ProductsModel.find({ product_id: product_id });
             if (!products) {
                 return [400, {
-                        message: "Product don't exists."
-                    }];
+                    message: "Product don't exists."
+                }];
             }
             return [200, {
-                    products
-                }];
+                products
+            }];
         }
         catch (error) {
             return [500, error];
@@ -117,12 +117,12 @@ class productsService {
             const productsLength = await products_model_1.ProductsModel.find(body).count();
             if (!productsLength) {
                 return [400, {
-                        message: "Product don't exists."
-                    }];
+                    message: "Product don't exists."
+                }];
             }
             return [200, {
-                    products: productsLength
-                }];
+                products: productsLength
+            }];
         }
         catch (error) {
             return [500, error];
@@ -141,7 +141,6 @@ class productsService {
                 filters['product_subcategory_id'] = { $eq: subcategory };
             if (brand !== '')
                 filters['product_brand_id'] = { $eq: brand };
-            console.log(filters);
             if (page == 0)
                 products = await products_model_1.ProductsModel.find(filters).sort(sort);
             else
@@ -149,12 +148,12 @@ class productsService {
             const totalItems = await products_model_1.ProductsModel.find(filters).count();
             if (!products) {
                 return [400, {
-                        message: 'There are no categories.'
-                    }];
+                    message: 'There are no categories.'
+                }];
             }
             return [200, {
-                    products
-                },
+                products
+            },
                 totalItems
             ];
         }
@@ -170,15 +169,15 @@ class productsService {
             }
             if (image === undefined) {
                 return [500, {
-                        message: "Archivo subido sin exito"
-                    }];
+                    message: "Archivo subido sin exito"
+                }];
             }
             let response = image.location + "?t=" + Date.now();
             ;
             const picture = await products_model_1.ProductsModel.findOneAndUpdate({ product_id: product_id }, { product_image: response }, { upsert: true, new: true });
             return [201, {
-                    message: "Banner image updated.", picture
-                }];
+                message: "Banner image updated.", picture
+            }];
         }
         catch (error) {
             return [500, error];

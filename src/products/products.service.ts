@@ -1,11 +1,42 @@
+import { brandsModel } from '../brands/brands.model';
+import { categoriesModel, subcategoriesModel, subsubcategoriesModel } from '../categories/categories.model';
+import { laboratoriesModel } from '../laboratories/laboratories.model';
 import { ProductsModel } from './products.model';
 
 class productsService {
-
-
     public async createProduct(body: any): Promise<Array<any>> {
         try {
             const create_product: any = await ProductsModel.create(body);
+            const brand: any = await brandsModel.findOneAndUpdate({ brand_id: body.product_brand_id })
+            const laboratory: any = await laboratoriesModel.findOneAndUpdate({ laboratory_id: body.product_laboratory_id })
+            const insert_products_category: any = await categoriesModel.findOneAndUpdate({ category_id: body.product_category_id }, {
+                $push: { products: create_product._id, brands: brand, laboratories: laboratory }
+            }, { upsert: true, new: true });
+            if (!insert_products_category) {
+                return [400, {
+                    message: 'Product not add in category'
+                }];
+            }
+            if (body.product_subcategory_id) {
+                const insert_products_subcategory: any = await subcategoriesModel.findOneAndUpdate({ subcategory_id: body.product_subcategory_id }, {
+                    $push: { products: create_product._id, brands: brand, laboratories: laboratory }
+                }, { upsert: true, new: true });
+                if (!insert_products_subcategory) {
+                    return [400, {
+                        message: 'Product not add in subcategory'
+                    }];
+                }
+            }
+            if (body.product_subsubcategory_id) {
+                const insert_products_subsubcategory: any = await subsubcategoriesModel.findOneAndUpdate({ subsubcategory_id: body.product_subsubcategory_id }, {
+                    $push: { products: create_product._id, brands: brand, laboratories: laboratory }
+                }, { upsert: true, new: true });
+                if (!insert_products_subsubcategory) {
+                    return [400, {
+                        message: 'Product not add in subsusbcategory'
+                    }];
+                }
+            }
             return [201, { message: 'Product added', create_product }];
         } catch (error) {
             return [500, error];
@@ -31,14 +62,14 @@ class productsService {
             if (!productExist) {
                 return [404, { message: "product not found." }]
             }
-            const edit_product = await ProductsModel.findOneAndUpdate({ product_id: product_id }, body).setOptions({ new: true });
-            if (!edit_product) {
+            const update_product = await ProductsModel.findOneAndUpdate({ product_id: product_id }, body).setOptions({ new: true });
+            if (!update_product) {
                 return [401, {
                     message: 'Product not update'
                 }];
             }
             return [200, {
-                edit_product
+                edit_product: update_product
             }]
         } catch (error) {
             return [500, error];
@@ -137,10 +168,37 @@ class productsService {
             if (typeof search !== 'string') filters['$or'] = search
             if (subcategory !== '') filters['product_subcategory_id'] = { $eq: subcategory }
             if (brand !== '') filters['product_brand_id'] = { $eq: brand }
-            console.log(filters);
             if (page == 0) products = await ProductsModel.find(filters).sort(sort);
             else products = await ProductsModel.find(filters).setOptions({ skip: skip, limit: limit }).sort(sort);
             const totalItems = await ProductsModel.find(filters).count();
+            const total_products = await ProductsModel.find(filters)
+            let labs: any[] = [];
+            let brands: any[] = [];
+            let labsNumbers: any[] = [];
+            let brandsNumbers: any[] = [];
+            await Promise.all(
+                total_products.map(async (product: any) => {
+                    brands.push(await brandsModel.findOne({ brand_id: product.product_brand_id }));
+                    labs.push(await laboratoriesModel.find({ laboratory_id: product.product_lab_id }));
+                    brandsNumbers.push(product.product_brand_id);
+                    labsNumbers.push(product.product_lab_id);
+                })
+            );
+
+            let uniqueLabs = [];
+            let uniqueBrands = [];
+            let uniqueLabsNumbers = [...new Set(labsNumbers)];
+            let uniqueBrandsNumbers = [...new Set(brandsNumbers)];
+            await Promise.all(
+                uniqueBrandsNumbers.map(async (brand: string) => {
+                    uniqueBrands.push(await brandsModel.findOne({ brand_id: brand }));
+                })
+            );
+            await Promise.all(
+                uniqueLabsNumbers.map(async (laboratory: string) => {
+                    uniqueLabs.push(await laboratoriesModel.findOne({ laboratory_id: laboratory }));
+                })
+            );
             if (!products) {
                 return [400, {
                     message: 'There are no categories.'
@@ -149,7 +207,11 @@ class productsService {
             return [200, {
                 products
             },
-                totalItems
+                totalItems,
+                brands,
+                uniqueBrands,
+                labs,
+                uniqueLabs
             ];
         } catch (error) {
             return [500, error];

@@ -85,12 +85,20 @@ class ProductsCtrl {
             const skip: number = (page - 1) * limit;
             let response: any = await service.getProductByCategoryService(category_id, page, search, brands, subcategory, min, max, sort, limit, skip);
             const totalItems = response[2];
+            const filter_brands = response[3];
+            const filter_unique_brands = response[4];
+            const filter_labs = response[5];
+            const filter_unique_labs = response[6];
             const data: object = {
                 totalItems: totalItems,
                 pageLength: limit,
                 numberPages: Math.ceil(Number(totalItems) / limit),
                 thisPage: response[1].products.length,
-                items: response[1].products
+                items: response[1].products,
+                allBrands: filter_brands,
+                brandsToFilter: filter_unique_brands,
+                allLaboratories: filter_labs,
+                labsTOfilteritems: filter_unique_labs,
             }
             Handler(res, response[0], data)
         } catch (error) {

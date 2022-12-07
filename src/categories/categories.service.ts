@@ -1,4 +1,4 @@
-import { categoriesModel, ICategoriesSubcategories, ICategoriesSubSubcategories, subcategoriesModel, subsubcategoriesModel } from './categories.model';
+import { categoriesModel, subcategoriesModel, subsubcategoriesModel } from './categories.model';
 
 class CategoriesService {
     public async fetchCategoriesService(body: object, page: number, limit: number, skip: number): Promise<any> {
@@ -6,21 +6,31 @@ class CategoriesService {
             let categories;
             if (page == 0) {
                 categories = await categoriesModel.find(body).populate(
-                    {
-                        path: 'subcategories',
-                        populate: {
-                            path: 'subsubcategories'
+                    [
+                        {
+                            path: 'subcategories',
+                            populate: {
+                                path: 'subsubcategories products brands laboratories'
+                            }
+                        },
+                        {
+                            path: 'products brands laboratories',
                         }
-                    }
+                    ]
                 );
             } else {
                 categories = await categoriesModel.find(body).setOptions({ skip: skip, limit: limit }).populate(
-                    {
-                        path: 'subcategories',
-                        populate: {
-                            path: 'subsubcategories'
+                    [
+                        {
+                            path: 'subcategories',
+                            populate: {
+                                path: 'subsubcategories products brands laboratories'
+                            }
+                        },
+                        {
+                            path: 'products brands laboratories',
                         }
-                    }
+                    ]
                 );
             }
             if (!categories) {
@@ -28,10 +38,13 @@ class CategoriesService {
                     message: 'There are no categories.'
                 }];
             }
+            this.getLabsCount(categories);
             return [200, {
                 categories
             }];
         } catch (error) {
+            console.log(error);
+
             return [500, error];
         }
     }
@@ -40,9 +53,33 @@ class CategoriesService {
         try {
             let subcategories;
             if (page == 0) {
-                subcategories = await subcategoriesModel.find(body);
+                subcategories = await subcategoriesModel.find(body).populate(
+                    [
+                        {
+                            path: 'subsubcategories',
+                            populate: {
+                                path: 'subsubcategories products brands laboratories'
+                            }
+                        },
+                        {
+                            path: 'subsubcategories products brands laboratories',
+                        },
+                    ]
+                );
             } else {
-                subcategories = await subcategoriesModel.find(body).setOptions({ skip: skip, limit: limit });
+                subcategories = await subcategoriesModel.find(body).setOptions({ skip: skip, limit: limit }).populate(
+                    [
+                        {
+                            path: 'subsubcategories',
+                            populate: {
+                                path: 'subsubcategories products brands laboratories'
+                            }
+                        },
+                        {
+                            path: 'subsubcategories products brands laboratories',
+                        },
+                    ]
+                );
             }
             if (!subcategories) {
                 return [400, {
@@ -61,9 +98,17 @@ class CategoriesService {
         try {
             let subsubcategories;
             if (page == 0) {
-                subsubcategories = await subsubcategoriesModel.find(body);
+                subsubcategories = await subsubcategoriesModel.find(body).populate(
+                    {
+                        path: 'products brands laboratories',
+                    },
+                );
             } else {
-                subsubcategories = await subsubcategoriesModel.find(body).setOptions({ skip: skip, limit: limit });
+                subsubcategories = await subsubcategoriesModel.find(body).setOptions({ skip: skip, limit: limit }).populate(
+                    {
+                        path: 'products brands laboratories',
+                    },
+                );
             }
             if (!subsubcategories) {
                 return [400, {
@@ -89,6 +134,8 @@ class CategoriesService {
                     }
                 }
             );
+            this.getLabsCount(categories);
+
             return [200, {
                 categories
             }];
@@ -476,6 +523,18 @@ class CategoriesService {
         try {
             let segmentCount: number = await subsubcategoriesModel.find(body).count();
             return segmentCount
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    public async getLabsCount(body: any): Promise<number> {
+        try {
+
+
+            //let labsCount: number = await categoriesModel.find();
+            //return labsCount
+            return
         } catch (error) {
             throw error;
         }

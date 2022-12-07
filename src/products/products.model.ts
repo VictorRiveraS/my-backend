@@ -5,13 +5,10 @@ export interface IProducts {
     product_name: string;
     product_type_use: string;
     product_technical_info: any[];
-    product_lab: string;
     product_lab_id: string;
-    product_category: string;
     product_category_id: string;
-    product_subcategory: string;
-    product_subcategory_id: string;
-    product_brand: string;
+    product_subcategory_id?: string;
+    product_subsubcategory_id?: string;
     product_brand_id: string;
     product_image: string;
     product_price: number;
@@ -61,37 +58,20 @@ const newsSchema = new Schema<IProducts>({
         ],
         required: false
     },
-    product_lab: {
-        type: String,
-        required: [true, 'Product laboratory is required.']
-    },
     product_lab_id: {
-        type: String,
-        required: [true, 'Product laboratory id is required.']
-    },
-    product_category: {
-        type: String,
-        required: [true, 'Product category is required.']
+        type: Schema.Types.String, ref: 'laboratories'
     },
     product_category_id: {
-        type: String,
-        required: [true, 'Product category id is required.']
-    },
-    product_subcategory: {
-        type: String,
-        required: [true, 'Product subcategory is required.']
+        type: Schema.Types.String, ref: 'categories'
     },
     product_subcategory_id: {
-        type: String,
-        required: [true, 'Product subcategory id is required.']
+        type: Schema.Types.String, ref: 'subcategories'
     },
-    product_brand: {
-        type: String,
-        required: [true, 'Product brand is required.']
+    product_subsubcategory_id: {
+        type: Schema.Types.String, ref: 'subsubcategories'
     },
     product_brand_id: {
-        type: String,
-        required: [true, 'Product brand id is required.']
+        type: Schema.Types.String, ref: 'brands'
     },
     product_image: {
         type: String,

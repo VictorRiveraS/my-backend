@@ -236,7 +236,6 @@ class CategoriesCtrl {
                 return false;
             }
             req.params.route_upload_s3 = 'Subcategories' + "/" + type + "/" + subcategory_id + "/";
-            console.log(req.params.route_upload_s3);
             req.params.type_upload_s3 = type;
             next();
         }
@@ -246,7 +245,6 @@ class CategoriesCtrl {
     }
     async fetchSubsubcategories(req, res) {
         try {
-            console.log(12);
             const page = Number(req.query.page);
             const limit = Number(req.query.limit);
             let body;
@@ -265,7 +263,6 @@ class CategoriesCtrl {
             }
             const skip = (page - 1) * limit;
             const totalItems = await categories_service_1.default.getSubsubcategoriesCount(body);
-            console.log(1);
             let response = await categories_service_1.default.fetchSubsubcategoriesService(body, page, limit, skip);
             const data = {
                 totalItems: totalItems,
@@ -330,7 +327,6 @@ class CategoriesCtrl {
                 return false;
             }
             req.params.route_upload_s3 = 'Subcategories' + "/" + type + "/" + subcategory_id + "/";
-            console.log(req.params.route_upload_s3);
             req.params.type_upload_s3 = type;
             next();
         }
