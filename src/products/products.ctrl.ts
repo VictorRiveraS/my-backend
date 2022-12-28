@@ -89,6 +89,8 @@ class ProductsCtrl {
             const filter_unique_brands = response[4];
             const filter_labs = response[5];
             const filter_unique_labs = response[6];
+            const filter_unique_uses = response[7];
+            const filter_unique_sufferings = response[8];
             const data: object = {
                 totalItems: totalItems,
                 pageLength: limit,
@@ -96,9 +98,11 @@ class ProductsCtrl {
                 thisPage: response[1].products.length,
                 items: response[1].products,
                 allBrands: filter_brands,
-                brandsToFilter: filter_unique_brands,
                 allLaboratories: filter_labs,
-                labsTOfilteritems: filter_unique_labs,
+                brands_to_filter_items: filter_unique_brands,
+                labs_to_filter_items: filter_unique_labs,
+                uses_to_filter_items: filter_unique_uses,
+                sufferings_to_filter_items: filter_unique_sufferings,
             }
             Handler(res, response[0], data)
         } catch (error) {

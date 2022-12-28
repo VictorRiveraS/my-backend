@@ -174,31 +174,40 @@ class productsService {
             const total_products = await ProductsModel.find(filters)
             let labs: any[] = [];
             let brands: any[] = [];
+            let usesNumbers: any[] = [];
             let labsNumbers: any[] = [];
             let brandsNumbers: any[] = [];
+            let sufferingsNumbers: any[] = [];
             await Promise.all(
                 total_products.map(async (product: any) => {
                     brands.push(await brandsModel.findOne({ brand_id: product.product_brand_id }));
                     labs.push(await laboratoriesModel.find({ laboratory_id: product.product_lab_id }));
                     brandsNumbers.push(product.product_brand_id);
                     labsNumbers.push(product.product_lab_id);
+                    usesNumbers.push(product.product_technical_info.find((codes: any) => codes.code == 'duration') ?? '');
+                    sufferingsNumbers.push(product.product_technical_info.find((codes: any) => codes.code == 'type') ?? '');
                 })
             );
-
             let uniqueLabs = [];
+            let uniqueUses = [];
             let uniqueBrands = [];
+            let uniqueSufferings = [];
+            let uniqueUsesNumbers = [...new Set(usesNumbers)];
             let uniqueLabsNumbers = [...new Set(labsNumbers)];
             let uniqueBrandsNumbers = [...new Set(brandsNumbers)];
+            let uniqueSufferingsNumbers = [...new Set(sufferingsNumbers)];
             await Promise.all(
                 uniqueBrandsNumbers.map(async (brand: string) => {
                     uniqueBrands.push(await brandsModel.findOne({ brand_id: brand }));
-                })
+                }),
             );
             await Promise.all(
                 uniqueLabsNumbers.map(async (laboratory: string) => {
                     uniqueLabs.push(await laboratoriesModel.findOne({ laboratory_id: laboratory }));
                 })
             );
+            uniqueSufferings = uniqueSufferingsNumbers.map((uses) => { return uses.value })
+            uniqueUses = uniqueUsesNumbers.map((uses) => { return uses.value })
             if (!products) {
                 return [400, {
                     message: 'There are no categories.'
@@ -211,7 +220,9 @@ class productsService {
                 brands,
                 uniqueBrands,
                 labs,
-                uniqueLabs
+                uniqueLabs,
+                [...new Set(uniqueUses)],
+                [...new Set(uniqueSufferings)]
             ];
         } catch (error) {
             return [500, error];
