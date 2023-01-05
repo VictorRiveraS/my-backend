@@ -158,20 +158,11 @@ class productsService {
         }
     }
 
-    public async getProductByCategoryService(category_id: string, page: number, search: any, brand: string, subcategory: string, min: number, max: number, sort: any, limit: number, skip: number): Promise<Array<any>> {
+    public async getProductByCategoryService(findParams: object, sort: any, pagination: object): Promise<Array<any>> {
         try {
-            let products;
-            let filters: any = {
-                product_category_id: category_id,
-                product_price: { $lte: max, $gte: min },
-            }
-            if (typeof search !== 'string') filters['$or'] = search
-            if (subcategory !== '') filters['product_subcategory_id'] = { $eq: subcategory }
-            if (brand !== '') filters['product_brand_id'] = { $eq: brand }
-            if (page == 0) products = await ProductsModel.find(filters).sort(sort);
-            else products = await ProductsModel.find(filters).setOptions({ skip: skip, limit: limit }).sort(sort);
-            const totalItems = await ProductsModel.find(filters).count();
-            const total_products = await ProductsModel.find(filters)
+            let products = await ProductsModel.find(findParams).setOptions(pagination).sort(sort);
+            const totalItems = await ProductsModel.find(findParams).count();
+            const total_products = await ProductsModel.find(findParams);
             let labs: any[] = [];
             let brands: any[] = [];
             let usesNumbers: any[] = [];
