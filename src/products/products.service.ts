@@ -6,7 +6,11 @@ import { ProductsModel } from './products.model';
 class productsService {
     public async createProduct(body: any): Promise<Array<any>> {
         try {
+            console.log(body.product_family_friend_url);
+
             const create_product: any = await ProductsModel.create(body);
+            console.log(create_product);
+
             const brand: any = await brandsModel.findOneAndUpdate({ brand_id: body.product_brand_id })
             const laboratory: any = await laboratoriesModel.findOneAndUpdate({ laboratory_id: body.product_laboratory_id })
             const insert_products_category: any = await categoriesModel.findOneAndUpdate({ category_id: body.product_category_id }, {

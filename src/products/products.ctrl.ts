@@ -4,6 +4,7 @@ import service from './products.service';
 import { UUIDv4 } from "uuid-v4-validator";
 import { brandsModel } from '../brands/brands.model';
 import { laboratoriesModel } from '../laboratories/laboratories.model';
+
 class ProductsCtrl {
     public async fetchProducts(req: Request, res: Response): Promise<any> {
         try {
@@ -257,6 +258,7 @@ class ProductsCtrl {
         try {
             const body = req.body;
             body.product_id = new UUIDv4().id.substring(0, 8);
+            body.product_family_friend_url = body["product_name"].replace(/[^a-z0-9_-]/gi, '-').replace(/_{1,}/g, '-').replace(/-{2,}/g, '-').toLowerCase();
             const response = await service.createProduct(body);
             Handler(res, response[0], response[1]);
         } catch (error) {

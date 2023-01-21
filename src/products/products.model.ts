@@ -3,6 +3,7 @@ import { model, Schema } from "mongoose";
 export interface IProducts {
     product_id: string | null | undefined;
     product_name: string;
+    product_family_friend_url: string;
     product_type_use: string;
     product_technical_info: any[];
     product_lab_id: string;
@@ -38,6 +39,10 @@ const newsSchema = new Schema<IProducts>({
     product_name: {
         type: String,
         required: [true, 'Product name is required.']
+    },
+    product_family_friend_url: {
+        type: String,
+        required: false
     },
     product_technical_info: {
         type: [
