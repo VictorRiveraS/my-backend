@@ -14,6 +14,6 @@ exports.BannersRoutes
     .get('/', validators_1.default.validate, banners_ctrl_1.default.fetchBanners)
     .get('/id', banners_validator_1.bannerssValidator, validators_1.default.validate, banners_ctrl_1.default.getBannerById)
     .post('/', validators_1.default.validate, banners_ctrl_1.default.createBanner)
-    .post('/picture-banner', banners_ctrl_1.default.setInfoUpload, upload_s3_service_1.uploadImageS3.single('file'), banners_validator_1.addBannerImageValidator, validators_1.default.validate, banners_ctrl_1.default.addNewsImage)
+    .post('/picture-banner', banners_ctrl_1.default.setInfoUpload, upload_s3_service_1.uploadImageS3.single('file'), banners_validator_1.addBannerImageValidator, validators_1.default.validate, banners_ctrl_1.default.addBannerImage)
     .patch('/', banners_validator_1.bannerssValidator, validators_1.default.validate, banners_ctrl_1.default.updateBanner)
     .delete('/', banners_validator_1.bannerssValidator, validators_1.default.validate, banners_ctrl_1.default.deleteBanner);

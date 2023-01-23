@@ -4,8 +4,8 @@ const laboratories_model_1 = require("./laboratories.model");
 class LaboratoriesService {
     async createLaboratories(body) {
         try {
-            const create_brand = await laboratories_model_1.laboratoriesModel.create(body);
-            return [201, { message: 'Laboratory added', create_brand }];
+            const create_laboratory = await laboratories_model_1.laboratoriesModel.create(body);
+            return [201, { message: 'Laboratory added', create_laboratory }];
         }
         catch (error) {
             return [500, error];
@@ -49,7 +49,7 @@ class LaboratoriesService {
         try {
             const laboratoryExist = await this.laboratoryExist(laboratory_id);
             if (!laboratoryExist) {
-                return [404, { message: "Brand not found." }];
+                return [404, { message: "Laboratory not found." }];
             }
             const delete_laboratory_remove = await laboratories_model_1.laboratoriesModel.findOneAndDelete({ laboratory_id: laboratory_id }, body);
             if (!delete_laboratory_remove) {

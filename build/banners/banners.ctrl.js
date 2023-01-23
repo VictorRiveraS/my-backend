@@ -61,7 +61,7 @@ class BannersCtrl {
             (0, request_handler_1.default)(res, 500, error);
         }
     }
-    async addNewsImage(req, res) {
+    async addBannerImage(req, res) {
         try {
             const banner_id = req.query.banner_id;
             const image = req.file;

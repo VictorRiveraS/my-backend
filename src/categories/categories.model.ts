@@ -5,9 +5,11 @@ export interface ICategories {
     category_name: string;
     category_image: string;
     category_type: string;
-    category_brands: Array<ICategoriesBrands>;
     category_subcategory?: Array<ICategoriesSubcategories>;
     subcategories?: any,
+    products?: any,
+    laboratories?: any,
+    brands?: any,
     isActive: boolean;
     created_at?: Date;
     updated_at?: Date;
@@ -20,12 +22,13 @@ export interface ISubcategories {
     subcategory_name: string;
     subcategory_image: string;
     subcategory_type: string;
-    subcategory_brands?: Array<ICategoriesBrands>;
-    subcategory_laboratory?: Array<ICategoriesLaboratory>;
     category_root?: string;
     category_root_id: string;
     category_subsubcategory?: Array<ICategoriesSubSubcategories>;
     subsubcategories?: any;
+    products?: any,
+    laboratories?: any,
+    brands?: any,
     isActive: boolean;
     created_at?: Date;
     updated_at?: Date;
@@ -38,26 +41,18 @@ export interface ISubSubcategories {
     subsubcategory_name: string;
     subsubcategory_image: string;
     subsubcategory_type: string;
-    subsubcategory_brands?: Array<ICategoriesBrands>;
-    subsubcategory_laboratory?: Array<ICategoriesLaboratory>;
     category_root: string;
     category_root_id: string;
     subcategory: string;
     subcategory_id: string;
+    products?: any,
+    laboratories?: any,
+    brands?: any,
     isActive: boolean;
     created_at?: Date;
     updated_at?: Date;
     created_by?: string;
     updated_by?: string;
-}
-export interface ICategoriesBrands {
-    brand_id: string;
-    brand_name: string;
-}
-
-export interface ICategoriesLaboratory {
-    laboratory_id: string;
-    laboratory_name: string;
 }
 
 export interface ICategoriesSubcategories {
@@ -94,21 +89,6 @@ const newsSchemaCategories = new Schema<ICategories>(
             type: String,
             required: true
         },
-        category_brands: {
-            type: [
-                {
-                    brand_id: {
-                        type: String,
-                        required: false
-                    },
-                    brand_name: {
-                        type: String,
-                        required: false
-                    }
-                }
-            ],
-            required: true
-        },
         category_subcategory: {
             type: [
                 {
@@ -142,6 +122,21 @@ const newsSchemaCategories = new Schema<ICategories>(
         subcategories: [
             {
                 type: Schema.Types.ObjectId, ref: 'subcategories'
+            }
+        ],
+        products: [
+            {
+                type: Schema.Types.ObjectId, ref: 'products'
+            }
+        ],
+        laboratories: [
+            {
+                type: Schema.Types.ObjectId, ref: 'laboratories'
+            }
+        ],
+        brands: [
+            {
+                type: Schema.Types.ObjectId, ref: 'brands'
             }
         ],
         isActive: {
@@ -180,36 +175,6 @@ const newsSchemaSubcategories = new Schema<ISubcategories>(
             type: String,
             required: true
         },
-        subcategory_brands: {
-            type: [
-                {
-                    brand_id: {
-                        type: String,
-                        required: false
-                    },
-                    brand_name: {
-                        type: String,
-                        required: false
-                    }
-                }
-            ],
-            required: false
-        },
-        subcategory_laboratory: {
-            type: [
-                {
-                    laboratory_id: {
-                        type: String,
-                        required: false
-                    },
-                    laboratory_name: {
-                        type: String,
-                        required: false
-                    }
-                }
-            ],
-            required: false
-        },
         category_root: {
             type: Schema.Types.String, ref: 'subcategories'
         },
@@ -232,7 +197,26 @@ const newsSchemaSubcategories = new Schema<ISubcategories>(
             ],
             required: false
         },
-        subsubcategories: [{ type: Schema.Types.ObjectId, ref: 'subsubcategories' }],
+        subsubcategories: [
+            {
+                type: Schema.Types.ObjectId, ref: 'subsubcategories'
+            }
+        ],
+        products: [
+            {
+                type: Schema.Types.ObjectId, ref: 'products'
+            }
+        ],
+        laboratories: [
+            {
+                type: Schema.Types.ObjectId, ref: 'laboratories'
+            }
+        ],
+        brands: [
+            {
+                type: Schema.Types.ObjectId, ref: 'brands'
+            }
+        ],
         isActive: {
             type: Boolean,
             required: true
@@ -269,36 +253,6 @@ const newsSchemaSubSubcategories = new Schema<ISubSubcategories>(
             type: String,
             required: true
         },
-        subsubcategory_brands: {
-            type: [
-                {
-                    brand_id: {
-                        type: String,
-                        required: false
-                    },
-                    brand_name: {
-                        type: String,
-                        required: false
-                    }
-                }
-            ],
-            required: false
-        },
-        subsubcategory_laboratory: {
-            type: [
-                {
-                    laboratory_id: {
-                        type: String,
-                        required: false
-                    },
-                    laboratory_name: {
-                        type: String,
-                        required: false
-                    }
-                }
-            ],
-            required: false
-        },
         category_root: {
             type: Schema.Types.String, ref: 'subcategories'
         },
@@ -313,6 +267,21 @@ const newsSchemaSubSubcategories = new Schema<ISubSubcategories>(
             type: String,
             required: true
         },
+        products: [
+            {
+                type: Schema.Types.ObjectId, ref: 'products'
+            }
+        ],
+        laboratories: [
+            {
+                type: Schema.Types.ObjectId, ref: 'laboratories'
+            }
+        ],
+        brands: [
+            {
+                type: Schema.Types.ObjectId, ref: 'brands'
+            }
+        ],
         isActive: {
             type: Boolean,
             required: true

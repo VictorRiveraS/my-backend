@@ -15,10 +15,6 @@ const newsSchema = new mongoose_1.Schema({
         type: String,
         required: false
     },
-    laboratory_type: {
-        type: String,
-        required: false
-    },
     created_by: {
         type: String,
     },

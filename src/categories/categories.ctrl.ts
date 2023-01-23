@@ -34,7 +34,6 @@ class CategoriesCtrl {
             Handler(res, response[0], data);
         } catch (error) {
             console.log(error);
-
             Handler(res, 500, error);
         }
     }
@@ -46,7 +45,6 @@ class CategoriesCtrl {
             Handler(res, response[0], response[1]);
         } catch (error) {
             console.log(error);
-
             Handler(res, 500, error);
         }
     }
@@ -77,11 +75,8 @@ class CategoriesCtrl {
             const body = req.body;
             body.category_id = new UUIDv4().id.substring(0, 8);
             const response = await service.createCategories(body);
-            console.log(response);
             Handler(res, response[0], response[1]);
         } catch (error) {
-            console.log(error);
-
             Handler(res, 500, error);
         }
     }
@@ -193,8 +188,6 @@ class CategoriesCtrl {
         }
     }
 
-
-
     public async createSubcategories(req: Request, res: Response): Promise<any> {
         try {
             const body = req.body;
@@ -239,7 +232,6 @@ class CategoriesCtrl {
                 return false;
             }
             req.params.route_upload_s3 = 'Subcategories' + "/" + type + "/" + subcategory_id + "/";
-            console.log(req.params.route_upload_s3);
             req.params.type_upload_s3 = type;
             next();
         } catch (error) {
@@ -249,8 +241,6 @@ class CategoriesCtrl {
 
     public async fetchSubsubcategories(req: Request, res: Response): Promise<any> {
         try {
-            console.log(12);
-
             const page: number = Number(req.query.page);
             const limit: any = Number(req.query.limit);
             let body: object;
@@ -268,8 +258,6 @@ class CategoriesCtrl {
             }
             const skip: number = (page - 1) * limit;
             const totalItems = await service.getSubsubcategoriesCount(body);
-            console.log(1);
-
             let response: any = await service.fetchSubsubcategoriesService(body, page, limit, skip);
             const data: object = {
                 totalItems: totalItems,
@@ -335,7 +323,6 @@ class CategoriesCtrl {
                 return false;
             }
             req.params.route_upload_s3 = 'Subcategories' + "/" + type + "/" + subcategory_id + "/";
-            console.log(req.params.route_upload_s3);
             req.params.type_upload_s3 = type;
             next();
         } catch (error) {
